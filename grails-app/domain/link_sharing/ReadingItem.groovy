@@ -1,11 +1,11 @@
 package link_sharing
 
 class ReadingItem {
-    ResourceData rsrc;
-    UserData usr;
+//    ResourceData res;
+//    UserData usr;
     Boolean isRead;
 
-    static belongsTo = [usr: UserData, rsrc: ResourceData]
+    static belongsTo = [usr: UserData, res: ResourceData]
 
     static constraints = {
     }

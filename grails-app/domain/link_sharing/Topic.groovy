@@ -2,7 +2,7 @@ package link_sharing
 
 class Topic {
     String name;
-    UserData createdBy;
+//    UserData createdBy;  -- what is the need of this, if with belongTo we are crating a relation
     Date lastUpdated;
     Date dateCreated;
     Visibility visibility;

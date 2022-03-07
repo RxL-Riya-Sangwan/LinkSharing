@@ -1,9 +1,7 @@
 package link_sharing
 
-class DocumentResource {
+class DocumentResource extends ResourceData{
     String filePath;
-
-    static belongsTo = [rsrc: ResourceData];
 
     static constraints = {
     }

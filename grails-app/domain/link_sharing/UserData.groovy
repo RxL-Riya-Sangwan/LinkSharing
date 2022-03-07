@@ -7,14 +7,15 @@ class UserData {
     String firstName;
     String lastName;
     Byte photo;
-    Boolean admin;
-    Boolean active;
+    Boolean isAdmin;
+    Boolean isActive;
     Date dateCreated;
     Date lastUpdated;
 
     static hasMany = [topics: Topic, subs: Subscription, res: ResourceData, readingItem: ReadingItem, resRating: ResourceRating];
 
     static constraints = {
+        username(unique: true)
         email(unique: true);
         photo(nullable: true, blank: true);
         password(minSize: 8);

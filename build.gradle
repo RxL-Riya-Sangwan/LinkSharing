@@ -43,7 +43,7 @@ dependencies {
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.1"
     runtime "com.h2database:h2"
     compile fileTree(dir: 'lib', include: '*.jar')
-    compile 'org.grails.plugins:grails-console:2.0.1'
+//    compile 'org.grails.plugins:grails-console:2.0.1'
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"

@@ -1,9 +1,7 @@
 package link_sharing
 
-class LinkResource {
+class LinkResource extends ResourceData{
     String url;
-
-    static belongsTo = [rsrc: ResourceData];
 
     static constraints = {
     }
