@@ -1,11 +1,11 @@
 package link_sharing
 
 class ResourceRating {
-    ResourceData res;
-    UserData usr;
+//    ResourceData res;
+//    UserData usr;
     Integer score;
 
-    static belongsTo = [usr: UserData, resRating: ResourceRating];
+    static belongsTo = [userdata: UserData, resourcedata: ResourceData];
 
     static constraints = {
     }

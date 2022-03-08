@@ -12,7 +12,7 @@ class UserData {
     Date dateCreated;
     Date lastUpdated;
 
-    static hasMany = [topics: Topic, subs: Subscription, res: ResourceData, readingItem: ReadingItem, resRating: ResourceRating];
+    static hasMany = [topics: Topic, subscription: Subscription, resourcedata: ResourceData, readingitem: ReadingItem, resourcerating: ResourceRating];
 
     static constraints = {
         username(unique: true)

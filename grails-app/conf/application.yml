@@ -101,8 +101,8 @@ dataSource:
     jmxExport: true
     driverClassName: oracle.jdbc.OracleDriver
     dialect: org.hibernate.dialect.Oracle10gDialect
-    username: Test
-    password: test
+    username: LinkSharing
+    password: linksharing
 
 environments:
     development:
@@ -135,3 +135,6 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+server:
+    port: 8092

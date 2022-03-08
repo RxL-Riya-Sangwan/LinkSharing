@@ -7,7 +7,7 @@ class Subscription {
     Seriousness seriousness;
     Date dateCreated;
 
-    static belongsTo = [usr: UserData, topic: Topic];
+    static belongsTo = [userdata: UserData, topic: Topic];
     static constraints = {
 
     }

@@ -5,7 +5,7 @@ class ReadingItem {
 //    UserData usr;
     Boolean isRead;
 
-    static belongsTo = [usr: UserData, res: ResourceData]
+    static belongsTo = [userdata: UserData, resourcedata: ResourceData]
 
     static constraints = {
     }
