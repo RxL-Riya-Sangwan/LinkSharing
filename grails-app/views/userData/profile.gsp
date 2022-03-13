@@ -30,10 +30,17 @@
 %{--                <p>Number ${num++} </p>--}%
 %{--            </g:while>--}%
 
+%{--            class SimpleTagLib {--}%
+%{--                def emoticon = { attr, body ->--}%
+%{--                        out << body() << (attrs.happy == 'true'? " : ": -)" : " :- (")--}%
+
+%{--                }--}%
+%{--            }--}%
+
+%{--<g:emoticon happy="true">Hi John!</g:emoticon>--}%
 
 
-
-        </g:form>
+%{--        </g:form>--}%
 <body>
 
 </body>

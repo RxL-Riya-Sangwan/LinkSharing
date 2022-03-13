@@ -1,0 +1,32 @@
+
+html, body{
+    font-family: 'Roboto Mono', monospace;
+    /*background-color: #edf5e1;*/
+    background-color: #c8dbf6;
+}
+
+.navbar{
+    /*background-color: #c8dbf6;*/
+    /*font-weight: 700;*/
+}
+
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: x-large;
+}
+
+.nav-item{
+    font-size: large;
+}
+
+.rightF{
+    float: right;
+    text-decoration: none;
+}
+
+.linkC{
+    color: darkblue;
+    text-decoration: none;
+}
+

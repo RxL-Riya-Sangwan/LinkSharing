@@ -1,5 +1,9 @@
 ---
 grails:
+    controllers:
+        upload:
+            maxFileSize: 26214400
+            maxRequestSize: 26214400
     profile: web
     codegen:
         defaultPackage: link_sharing

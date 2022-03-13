@@ -5,18 +5,18 @@ class BootStrap {
     def init = { servletContext ->
 
 
-        UserData user1 = new UserData(email: "a@x.com", username: "a", password: "12345678", firstName: "A", lastName: "X", isAdmin: true, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
-        UserData user2 = new UserData(email: "b@y.com", username: "b", password: "12345678", firstName: "B", lastName: "Y", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
-        UserData user3 = new UserData(email: "e@y.com", username: "e", password: "12345678", firstName: "C", lastName: "Y", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
+        UserData user1 = new UserData(email: "r@s.com", username: "riya", password: "12345678", firstName: "Riya", lastName: "Sangwan", isAdmin: true, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
+        UserData user2 = new UserData(email: "t@b.com", username: "tushar", password: "12345678", firstName: "Tushar", lastName: "Bhardwaj", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
+        UserData user3 = new UserData(email: "y@m.com", username: "yash", password: "12345678", firstName: "Yash", lastName: "Mohan", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
 
-        Topic topic1 = new Topic(name: "Topic1", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
-        Topic topic2 = new Topic(name: "Topic2", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
-        Topic topic3 = new Topic(name: "Topic3", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PrivateV)
+        Topic topic1 = new Topic(name: "Javascript", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
+        Topic topic2 = new Topic(name: "Java", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
+        Topic topic3 = new Topic(name: "Ajax", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PrivateV)
 
-        ResourceData res1 = new ResourceData(description: "belongs to topic1", lastUpdated: new Date(), dateCreated: new Date())
-        ResourceData res2 = new ResourceData(description: "belongs to topic2", lastUpdated: new Date(), dateCreated: new Date())
-        ResourceData res3 = new ResourceData(description: "belongs to topic3", lastUpdated: new Date(), dateCreated: new Date())
-        ResourceData res4 = new ResourceData(description: "belongs to topic3", lastUpdated: new Date(), dateCreated: new Date())
+        ResourceData res1 = new ResourceData(description: "belongs to javascript", lastUpdated: new Date(), dateCreated: new Date())
+        ResourceData res2 = new ResourceData(description: "belongs to java", lastUpdated: new Date(), dateCreated: new Date())
+        ResourceData res3 = new ResourceData(description: "belongs to ajax", lastUpdated: new Date(), dateCreated: new Date())
+        ResourceData res4 = new ResourceData(description: "belongs to ajax", lastUpdated: new Date(), dateCreated: new Date())
 
         Subscription sub1 = new Subscription(dateCreated: new Date(), seriousness: Seriousness.verySerious)
         Subscription sub2 = new Subscription(dateCreated: new Date(), seriousness: Seriousness.Casual)
@@ -25,7 +25,7 @@ class BootStrap {
         ReadingItem item2 = new ReadingItem(isRead: true)
 
         ResourceRating rating1 = new ResourceRating(score: 8)
-        ResourceRating rating2 = new ResourceRating(score: 5)
+        ResourceRating rating2 = new ResourceRating(score: 9)
 
 //        DocumentResource doc1 = new DocumentResource( filePath: "/home/doc1.txt")
 //        LinkResource doc2 = new LinkResource(url: "https://xyz.com/test1")
