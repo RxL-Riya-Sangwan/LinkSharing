@@ -33,6 +33,7 @@
                         <g:link class="nav-link active" id="loginForm" url="[controller: 'home', action: 'login']" method="GET">
                             Already have an Account? Sign in
                         </g:link>
+                        ${flash.message}
                     </li>
                 </ul>
                 <g:form class="d-flex" url="[controller: 'Topic', action: 'search']">
