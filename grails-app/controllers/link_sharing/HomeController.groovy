@@ -18,23 +18,25 @@ class HomeController {
             render(view: 'home')
         }
         else{
-
+            println "Inside else"
             UserData user1 = UserData.findByEmail(params.email)
-
-            if(!user1.validate()){
+            println user1.username
+            if (user1){
+                flash.message = 'Email already taken'
+                redirect url:'/'
+            }
+            
+            if(!user1?.validate()){
                 response.status = 404
                 render([error: 'an error occurred'] as JSON)
             }
 
-            if (user1){
-                flash.message = 'Email already taken'
-                render(view: 'login')
-            }
+            
 
             user1 = UserData.findByUsername(params.username)
             if(user1){
                 flash.message = 'Username taken'
-                render(view: 'login')
+                redirect url:'/'
             }
             else{
 
@@ -59,7 +61,7 @@ class HomeController {
                 else{
                     newUser.save(failOnError: true, flush: true)
 //                    session['id'] = newUser.getId()
-                    session['username'] = newUser.getUsername();
+                    session.username = newUser.getUsername();
 
                     response.status = 200
                     render(view: 'dashboard')
@@ -130,7 +132,8 @@ class HomeController {
 
     def logout(){
         // Error --No such property: currentSession for class: org.hibernate.SessionFactory Possible solutions: currentSession
-        SessionFactory.currentSession.flush()
-        SessionFactory.currentSession.clear()
+        println 'Logout'
+        session.invalidate()
+        redirect url:'/'
     }
 }
