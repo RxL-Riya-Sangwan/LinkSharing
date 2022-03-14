@@ -9,16 +9,16 @@ class BootStrap {
         UserData user2 = new UserData(email: "t@b.com", username: "tushar", password: "12345678", firstName: "Tushar", lastName: "Bhardwaj", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
         UserData user3 = new UserData(email: "y@m.com", username: "yash", password: "12345678", firstName: "Yash", lastName: "Mohan", isAdmin: false, isActive: true, dateCreated: new Date(), lastUpdated: new Date())
 
-        Topic topic1 = new Topic(name: "Javascript", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
-        Topic topic2 = new Topic(name: "Java", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PublicV)
-        Topic topic3 = new Topic(name: "Ajax", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.PrivateV)
+        Topic topic1 = new Topic(name: "Javascript", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.Public)
+        Topic topic2 = new Topic(name: "Java", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.Public)
+        Topic topic3 = new Topic(name: "Ajax", lastUpdated: new Date(), dateCreated: new Date(), visibility: Visibility.Private)
 
         ResourceData res1 = new ResourceData(description: "belongs to javascript", lastUpdated: new Date(), dateCreated: new Date())
         ResourceData res2 = new ResourceData(description: "belongs to java", lastUpdated: new Date(), dateCreated: new Date())
         ResourceData res3 = new ResourceData(description: "belongs to ajax", lastUpdated: new Date(), dateCreated: new Date())
         ResourceData res4 = new ResourceData(description: "belongs to ajax", lastUpdated: new Date(), dateCreated: new Date())
 
-        Subscription sub1 = new Subscription(dateCreated: new Date(), seriousness: Seriousness.verySerious)
+        Subscription sub1 = new Subscription(dateCreated: new Date(), seriousness: Seriousness.VerySerious)
         Subscription sub2 = new Subscription(dateCreated: new Date(), seriousness: Seriousness.Casual)
 
         ReadingItem item1 = new ReadingItem(isRead: true)

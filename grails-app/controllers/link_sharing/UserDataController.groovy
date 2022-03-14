@@ -14,6 +14,6 @@ class UserDataController {
     }
 
     def show(){
-
+e
     }
 }

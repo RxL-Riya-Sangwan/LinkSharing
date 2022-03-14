@@ -24,7 +24,7 @@ class UserData {
     }
 
     static mapping = {
-
+//        isActive defaultValue: true;
     }
 
 }

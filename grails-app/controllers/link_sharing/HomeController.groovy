@@ -2,16 +2,27 @@ package link_sharing
 
 import grails.converters.JSON
 import grails.transaction.Transactional
+import org.hibernate.Session
 import org.springframework.web.multipart.MultipartFile
-import org.hibernate.SessionFactory
 
 class HomeController {
 
     static allowedMethods = ['index': 'GET', 'login': ['GET', 'POST'], 'register': ['GET','POST'], forgotPassword: ['GET', 'POST']]
+    
+//    def sessionFactory -- Use it to create a new Session
+    def homeService
 
     def index(){
-        render(view: 'home')
+        println "${session['username']}"
+
+        if (session['username']){
+            render(view: 'home')
+        }
+        else{
+            render(view: 'login')
+        }
     }
+    
 
     def register(){
         if (request.method == 'GET'){
@@ -21,20 +32,22 @@ class HomeController {
 
             UserData user1 = UserData.findByEmail(params.email)
 
-            if(!user1.validate()){
-                response.status = 404
-                render([error: 'an error occurred'] as JSON)
-            }
-
             if (user1){
+                println 'Email taken'
                 flash.message = 'Email already taken'
                 render(view: 'login')
             }
 
             user1 = UserData.findByUsername(params.username)
-            if(user1){
+
+            if(user1) {
+                println 'Username taken'
                 flash.message = 'Username taken'
                 render(view: 'login')
+            }
+            else if(params.password != params.confirmPassword){
+                println 'Not same password'
+                render(view: 'home')
             }
             else{
 
@@ -47,22 +60,45 @@ class HomeController {
                 println 'creating new object'
 //                bindData(user1, params, [exclude: 'confirmPassword'])
                 UserData newUser = new UserData(params)
+                newUser.isActive = true
+                newUser.isAdmin = false
 
-                if (newUser.hasErrors()){
-                    println newUser.errors
+                if(!newUser.validate()){
+                    println 'validating'
+                    response.status = 404
+                    flash.message = 'Issues with Validation!'
                     render(view: 'home')
                 }
                 else if (newUser == null){
                     println 'Null Object'
                     render(view: 'home')
                 }
+                else if (newUser.hasErrors()){
+                    println newUser.errors
+                    render(view: 'home')
+                }
                 else{
                     newUser.save(failOnError: true, flush: true)
+//                    id is readOnly -- cannot be used
 //                    session['id'] = newUser.getId()
-                    session['username'] = newUser.getUsername();
+                    session['username'] = newUser.getUsername()
+                    if (newUser.isAdmin){
+                        session['role'] = 'admin'
+                    }
+                    else{
+                        session['role'] = 'notAdmin'
+                    }
 
                     response.status = 200
-                    render(view: 'dashboard')
+
+                    List <Subscription> li1 = Subscription.findAllByUserdata('riya')
+                    Integer subCount = li1.size()
+
+
+                    List <Topic> li2 = Topic.findAllByUserdata('riya')
+                    Integer topicCount = li2.size()
+
+                    render(view: 'dashboard', model: [newUser: newUser, subCount: subCount, topicCount: topicCount])
                 }
 
             }
@@ -70,43 +106,64 @@ class HomeController {
 
     }
 
+
     @Transactional
     def login(){
-
-        try{
-            println 'login --check for session'
-            SessionFactory.currentSession.flush()
-            SessionFactory.currentSession.clear()
-        }
-        catch (e){
-            println 'Not logged In'
-        }
-
         if (request.method == 'GET'){
             render(view: 'login')
         }
         else{
-            UserData user1 = UserData.findByUsername(params.username);
 
-            if (!user1){
-                user1 = UserData.findByEmail(params.username)
-            }
-            if (user1){
-                if  (params.password == user1.password){
-//                    session['id'] = user1.getId()
-                    session['username'] = user1.getUsername()
-                    println "${session['username']}"
-                    render(view: 'dashboard')
+            Result result  = homeService.getloginData(params, session)
+
+            if (result.user){
+                render(view: 'dashboard', model: [newUser: result.user])
+
+            }else{
+                if(result.code == 402){
+                    flash.message = result.value
+                    render(view: 'login')
                 }
-                else{
-                    flash.message = 'Incorrect credentials'
+                else if(result.code == 401){
+                    flash.message = result.value
                     render(view: 'forgotPassword')
                 }
+                else{
+                    flash.message = result.value
+                    render(view: 'home')
+                }
             }
-            else{
-                flash.message = "You're not registered yet!"
-                render(view: 'home')
-            }
+
+
+//            UserData user1 = UserData.findByUsername(params.username);
+//
+//            if (!user1){
+//                user1 = UserData.findByEmail(params.username)
+//            }
+//            if (user1){
+//                if  (params.password == user1.password){
+////                    session['id'] = user1.getId()
+//                    session['username'] = user1.getUsername()
+//                    if (user1.isAdmin){
+//                        session['role'] = 'admin'
+//                    }
+//                    else{
+//                        session['role'] = 'notAdmin'
+//                    }
+//                    println "${session['username']}"
+//                    render(view: 'dashboard', model: [newUser: user1])
+//                }
+//                else{
+//                    flash.message = 'Incorrect credentials'
+//                    render(view: 'forgotPassword')
+//                }
+//            }
+//            else{
+//                flash.message = "You're not registered yet!"
+//                render(view: 'home')
+//            }
+
+
 
         }
     }
@@ -129,8 +186,12 @@ class HomeController {
     }
 
     def logout(){
-        // Error --No such property: currentSession for class: org.hibernate.SessionFactory Possible solutions: currentSession
-        SessionFactory.currentSession.flush()
-        SessionFactory.currentSession.clear()
+        println 'logout'
+        session.invalidate();
+//        Session session = sessionFactory.currectsession
+//
+//        session.flush()
+//        session.clear()
+        redirect url: '/'
     }
 }

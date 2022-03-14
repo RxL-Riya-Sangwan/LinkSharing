@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <g:link class="nav-link active" id="loginForm" url="[controller: 'home', action: 'login']" method="GET">
+                        <g:link class="nav-link active linkC" id="loginForm" url="[controller: 'home', action: 'login']" method="GET">
                             Already have an Account? Sign in
                         </g:link>
                     </li>
@@ -42,6 +42,7 @@
             </div>
         </div>
     </nav>
+%{--    ${flash.message}--}%
     <div class="container mt-2">
             <div class="row">
                 <div class="col-sm-7">
@@ -165,7 +166,7 @@
                             <div class="mb-2">
                                 <p id="msg"></p>
                             </div>
-                            <g:submitButton class="btn btn-outline-dark" name="Register"/>
+                            <g:submitButton class="btn btn-outline-dark" name="Register" id="submitButton"/>
                         </g:form>
                 </div>
             </div>

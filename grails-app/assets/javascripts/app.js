@@ -1,12 +1,12 @@
 // For Password checking at client side
 
-$("#Confirm_Password").keyup(function (){
-    if($("#Password").val == $("#Confirm_Password").val){
-        $("#msg").text("Matching").css('color', 'green');
-    } else{
-        $("#msg").text("Not Matching").css('color', 'red');   // not coming here for checking
-    }
-});
+// $("#Confirm_Password").keyup(function (){
+//     if($("#Password").val == $("#Confirm_Password").val){
+//         $("#msg").text("Matching").css('color', 'green');
+//     } else{
+//         $("#msg").text("Not Matching").css('color', 'red');   // not coming here for checking
+//     }
+// });
 
 
 // For making pop login form
@@ -30,8 +30,24 @@ $("#Confirm_Password").keyup(function (){
 
 
 // For login form
-let loginForm = document.getElementById("loginForm");
-loginForm.addEventListener("onclick", function (){
-    console.log("clicked");
+// let loginForm = document.getElementById("loginForm");
+// loginForm.addEventListener("onclick", function (){
+//     console.log("clicked");
+// });
+
+
+
+// For password matching
+$("#confirmPassword").on("change keyup",
+    function(){
+        if($("#password").val() == $("#confirmPassword").val()){
+            console.log('matching')
+            $("#msg").text("Matching").css('color', 'green');
+        }
+        else{
+            console.log('not matching')
+            $("#msg").text("Not Matching").css('color', 'red');
+        }
 });
+
 

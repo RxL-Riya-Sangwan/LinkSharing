@@ -2,6 +2,6 @@ package link_sharing
 
 enum Seriousness {
     Serious,
-    verySerious,
+    VerySerious,
     Casual
 }

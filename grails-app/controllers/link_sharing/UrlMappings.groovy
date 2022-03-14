@@ -15,7 +15,7 @@ class UrlMappings {
 //        "/userTable"(controller: 'home', action: 'userTable')
 
 
-        "/user/dashboard"(controller: 'home', action: 'dashboard')
+//        "/user/dashboard"(controller: 'home', action: 'dashboard')
 //        "/user/profile/$id?"(controller: 'userData', action: 'profile')
 //        "/user/show/$id?"(controller: 'userData', action: 'show')
 
