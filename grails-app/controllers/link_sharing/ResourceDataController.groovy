@@ -6,102 +6,20 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class ResourceDataController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = ['create': ['POST', 'GET']]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond ResourceData.list(params), model:[resourceDataCount: ResourceData.count()]
-    }
+    def create(params){
+//            println "${params}"
+        UserData usr = UserData.findByUsername(session['username'])
 
-    def show(ResourceData resourceData) {
-        respond resourceData
-    }
+        ResourceData newResource = new ResourceData()
+            newResource.description = params.description
+            newResource.dateCreated = new Date()
+            newResource.lastUpdated = new Date()
+            newResource.topic = params.topic
+            newResource.userdata = usr
+           
 
-    def create() {
-        respond new ResourceData(params)
-    }
-
-    @Transactional
-    def save(ResourceData resourceData) {
-        if (resourceData == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (resourceData.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond resourceData.errors, view:'create'
-            return
-        }
-
-        resourceData.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'resourceData.label', default: 'ResourceData'), resourceData.id])
-                redirect resourceData
-            }
-            '*' { respond resourceData, [status: CREATED] }
-        }
-    }
-
-    def edit(ResourceData resourceData) {
-        respond resourceData
-    }
-
-    @Transactional
-    def update(ResourceData resourceData) {
-        if (resourceData == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (resourceData.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond resourceData.errors, view:'edit'
-            return
-        }
-
-        resourceData.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'resourceData.label', default: 'ResourceData'), resourceData.id])
-                redirect resourceData
-            }
-            '*'{ respond resourceData, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(ResourceData resourceData) {
-
-        if (resourceData == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        resourceData.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'resourceData.label', default: 'ResourceData'), resourceData.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'resourceData.label', default: 'ResourceData'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+            newResource.save(failOnError: true, flash: true)
     }
 }

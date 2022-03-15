@@ -2,7 +2,7 @@ package link_sharing
 
 class Topic {
     String name;
-//    UserData createdBy;
+//  UserData createdBy;
     Date lastUpdated;
     Date dateCreated;
     Visibility visibility;
@@ -12,5 +12,10 @@ class Topic {
 
     static constraints = {
 //        name(unique: true)
+    }
+
+    @Override
+    String toString() {
+        return name.capitalize()
     }
 }

@@ -46,7 +46,7 @@
     <div class="container mt-2">
             <div class="row">
                 <div class="col-sm-7">
-                    <div class="mb-3 border-dark card text-dark bg-light" >
+                    <div class="shadowC mb-3 border-dark card text-dark bg-light" >
                         <div class="row g-0">
                             <div class="card-header">
                                 Recent Shares
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2 border-dark card text-dark bg-light" >
+                    <div class="shadowC mt-2 border-dark card text-dark bg-light" >
                         <div class="row g-0">
                             <div class="card-header">
                                 <div class="container">
@@ -129,12 +129,11 @@
                 </div>
                 <div class="col-sm-1"></div>
                 <div class="col-sm-4">
-                    <div class="border border-dark card registerForm">
+                    <div class="shadowC border border-dark card registerForm">
                         <div class="card-header">
                             Register
                         </div>
-%{--                        enctype="multipart/form-data"--}%
-                        <g:form class="m-2 p-3" url="[controller: 'home', action: 'register']" method="post" >
+                        <g:uploadForm class="m-2 p-3" url="[controller: 'home', action: 'register']" method="post">
                             <div class="mb-2">
                                 <label for="firstName">First Name</label>
                                 <g:textField autocomplete="off" class="form-control" name="firstName" id="firstName" required="true"/>
@@ -166,8 +165,8 @@
                             <div class="mb-2">
                                 <p id="msg"></p>
                             </div>
-                            <g:submitButton class="btn btn-outline-dark" name="Register" id="submitButton"/>
-                        </g:form>
+                            <button class="btn btn-outline-dark" type="submit" name="Register" id="submitButton">Register</button>
+                        </g:uploadForm>
                 </div>
             </div>
             </div>

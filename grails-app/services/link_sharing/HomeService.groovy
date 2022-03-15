@@ -30,12 +30,12 @@ class HomeService {
 
         UserData user1 = UserData.findByUsername(params.username);
         res.code = 402
-        res.value = 'Email Taken'
+        res.value = 'Username Taken'
 
 
         if (!user1){
             user1 = UserData.findByEmail(params.username)
-            res.value = 'Username Taken'
+            res.value = 'Email Taken'
             return res
         }
         if (user1){

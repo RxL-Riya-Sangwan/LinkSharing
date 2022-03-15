@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <div class="border border-dark card">
+                <div class="shadowC border border-dark card">
                     <div class="card-header">
                         Login
                     </div>

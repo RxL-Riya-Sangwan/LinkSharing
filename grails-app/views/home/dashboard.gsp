@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${topicList.size()}</small>
                                     </div>
                                 </div>
                             </div>
@@ -115,28 +115,28 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>${subCount}</small>
+                                        <small>12</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${topicCount}</small>
+                                        <small>${topicList.size()}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
+                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness">
+%{--                            <option selected disabled hidden>Seriousness</option>--}%
+%{--                            <option value="Very Serious">Very Serious</option>--}%
+%{--                            <option value="Serious">Serious</option>--}%
+%{--                            <option value="Casual">Casual</option>--}%
+                        </g:select>
+                        <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility">
+%{--                            <option selected disabled hidden>Visibility</option>--}%
+%{--                            <option value="Private">Private</option>--}%
+%{--                            <option value="Public">Public</option>--}%
+                        </g:select>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
@@ -160,7 +160,7 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${topicList.size()}</small>
                                     </div>
                                 </div>
                             </div>
@@ -168,23 +168,23 @@
                     </div>
                 </div>
                 <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
-                    </select>
+                    <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" name="seriousness" from="${Seriousness}">
+%{--                        <option selected disabled hidden>Seriousness</option>--}%
+%{--                        <option value="Very Serious">Very Serious</option>--}%
+%{--                        <option value="Serious">Serious</option>--}%
+%{--                        <option value="Casual">Casual</option>--}%
+                    </g:select>
+                    <g:select class="form-select m-1" aria-label="Select Topic" id="visiblity" name="visibility" from="${Visibility}">
+%{--                        <option selected disabled hidden>Visibility</option>--}%
+%{--                        <option value="Private">Private</option>--}%
+%{--                        <option value="Public">Public</option>--}%
+                    </g:select>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-liodal" data-id="my_id_value">Open Modal</a>ght mb-3">
+            <div class="border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         Subscriptions
@@ -208,24 +208,24 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${topicList.size()}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
+                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" name="seriousness" from="${Seriousness}">
+%{--                            <option selected disabled hidden>Seriousness</option>--}%
+%{--                            <option value="Very Serious">Very Serious</option>--}%
+%{--                            <option value="Serious">Serious</option>--}%
+%{--                            <option value="Casual">Casual</option>--}%
+                        </g:select>
+                        <g:select class="form-select m-1" aria-label="Select Topic" id="visiblity" name="visibility" from="${Visibility}">
+%{--                            <option selected disabled hidden>Visibility</option>--}%
+%{--                            <option value="Private">Private</option>--}%
+%{--                            <option value="Public">Public</option>--}%
+                        </g:select>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
@@ -316,36 +316,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <g:form controller="resourceData" action="create" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <label for="doc" class="col-sm-2 col-form-label">Document</label>
                         <div class="col-sm-10">
-                            %{--                                Make file browse functionality: enctype="multipart/form-data"--}%
-                            <input type="file" class="form-control" id="doc" required>
+                            <input type="file" class="custom-file-input form-control" id="doc" name="document" accept="application/pdf" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="des" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="des" rows="3" required></textarea>
+                            <textarea class="form-control" id="des" rows="3" required name="description"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <select class="form-select" aria-label="Select Topic" id="topic">
-                                <option selected disabled hidden>Select topic for this resource</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <g:select class="form-select"  id="topic" name="topic" from="${topicList}">
+%{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+%{--                                <option value="1">One</option>--}%
+%{--                                <option value="2">Two</option>--}%
+%{--                                <option value="3">Three</option>--}%
+                            </g:select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-outline-primary">Share</button>
+                        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Share</button>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>
@@ -436,15 +435,15 @@
             <div class="modal-body">
                 <g:form controller="topic" action="create" method="post">
                     <div class="row mb-3">
-                        <label for="topicName" class="col-sm-2 col-form-label">Name</label>
+                        <label for="name" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
-                            <g:textField class="form-control" id="topicName" name="topicName" required="true" />
+                            <g:textField class="form-control" id="name" name="name" required="true" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="visibility" class="col-sm-2 col-form-label">Visibility</label>
                         <div class="col-sm-10">
-                            <g:select class="form-select" aria-label="Select Topic" id="visibility" from="${Visibility}"  name="visibility"/>
+                            <g:select class="form-select" aria-label="Select Topic" value="${Visibility}" id="visibility" from="${Visibility}"  name="visibility"/>
 %{--                                <option selected disabled hidden>Select Visibility</option>--}%
 %{--                                <option value="1">Public</option>--}%
 %{--                                <option value="2">Private</option>--}%
@@ -452,7 +451,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <g:submitButton type="button" class="btn btn-outline-primary" name="Create" data-bs-dismiss="modal">Create</g:submitButton>
+                        <Button type="submit" class="btn btn-outline-primary" name="Create" data-bs-dismiss="modal">Create</Button>
                     </div>
                 </g:form>
             </div>

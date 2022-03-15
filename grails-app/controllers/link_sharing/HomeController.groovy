@@ -13,10 +13,12 @@ class HomeController {
     def homeService
 
     def index(){
-        println "${session['username']}"
-
         if (session['username']){
-            render(view: 'home')
+
+            UserData usr = UserData.findByUsername(session['username'])
+            List <Topic> topicList = Topic.findAllByUserdata(usr)
+
+            render(view: 'dashboard', model: [newUser: usr, topicList: topicList])
         }
         else{
             render(view: 'login')
@@ -51,35 +53,38 @@ class HomeController {
             }
             else{
 
-                if (params.photo){
-                    MultipartFile file = params.photo as MultipartFile
-                    byte [] picture = file.getBytes();
-                    params.photo = picture
-                }
+//                if (params.photo){
+//                    MultipartFile file = params.photo as MultipartFile
+//                    byte [] picture = file.getBytes();
+//                    params.photo = picture
+
+//                }
+
+//                def f = request.getFile(params.photo)
+
+
+
+//                String filename=f.getOriginalFilename(params.photo)
 
                 println 'creating new object'
 //                bindData(user1, params, [exclude: 'confirmPassword'])
                 UserData newUser = new UserData(params)
                 newUser.isActive = true
                 newUser.isAdmin = false
+//
+//                if(!newUser.validate()){
+//                    println 'validating'
+//                    response.status = 404
+//                    flash.message = 'Issues with Validation!'
+//                    render(view: 'home')
+//                }
+//                else if (newUser.hasErrors()){
+//                    println newUser.errors
+//                    render(view: 'home')
+//                }
+//                else{
 
-                if(!newUser.validate()){
-                    println 'validating'
-                    response.status = 404
-                    flash.message = 'Issues with Validation!'
-                    render(view: 'home')
-                }
-                else if (newUser == null){
-                    println 'Null Object'
-                    render(view: 'home')
-                }
-                else if (newUser.hasErrors()){
-                    println newUser.errors
-                    render(view: 'home')
-                }
-                else{
-                    newUser.save(failOnError: true, flush: true)
-//                    id is readOnly -- cannot be used
+ //                    id is readOnly -- cannot be used
 //                    session['id'] = newUser.getId()
                     session['username'] = newUser.getUsername()
                     if (newUser.isAdmin){
@@ -89,17 +94,42 @@ class HomeController {
                         session['role'] = 'notAdmin'
                     }
 
+//
+//                    MultipartFile f = request.getFile(params.photo)
+//
+//                    if (!f.empty) {
+//                            String filePath = '/home/rxogix/Documents/SessionII/Link_Sharing/grails-app/assets/images/UserImage/' + session['username']
+//                    }
+//
+//                    f.tranferTo(new File(filePath))
+                    def f = request.getFile(params.photo)
+
+//                    String filename=f.getOriginalFilename()
+                    String filePath = '/home/rxogix/Documents/SessionII/Link_Sharing/grails-app/assets/images/UserImage/' + session['username']
+
+
+//                    String loc='/grails-app/assets/documents/'+ username + filename
+
+                    File des = new File(filePath)
+
+                    f.transferTo(des)
+//
+//                    String url=username+filename
+//
+//                    DocumentResource dr=newDocumentResource(documentPath: url , description:descrip
+
+                    newUser.save(failOnError: true, flush: true)
+
                     response.status = 200
 
-                    List <Subscription> li1 = Subscription.findAllByUserdata('riya')
-                    Integer subCount = li1.size()
+//                    List <Subscription> li1 = Subscription.findAllByUserdata(newUser)
 
 
-                    List <Topic> li2 = Topic.findAllByUserdata('riya')
-                    Integer topicCount = li2.size()
+                    UserData usr = UserData.findByUsername(session['username'])
+                    List <Topic> topicList = Topic.findAllByUserdata(usr)
 
-                    render(view: 'dashboard', model: [newUser: newUser, subCount: subCount, topicCount: topicCount])
-                }
+                    render(view: 'dashboard', model: [newUser: newUser, topicList: topicList])
+
 
             }
         }
