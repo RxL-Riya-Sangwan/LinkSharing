@@ -16,32 +16,90 @@ class Result{
 @Transactional
 class HomeService {
 
-    def sessionFactory
+//    def sessionFactory
 
-    def registerUser(params) {
+    def getRegisterData(params, session) {
 
+            Result res = new Result()
 
+            UserData user1 = UserData.findByEmail(params.email)
+
+            if (user1) {
+                println 'Email taken'
+                res.value = 'Email already taken'
+                res.code = 1
+            }
+
+            user1 = UserData.findByUsername(params.username)
+
+            if (user1) {
+                println 'Username taken'
+                res.value = 'Username already taken'
+                res.code = 1
+            }
+            else if (params.password != params.confirmPassword) {
+
+                res.value = 'Password do not match'
+                res.code = 1
+
+            }
+            else {
+
+                println 'creating new object'
+                println params
+
+                UserData newUser = new UserData(params)
+                newUser.isActive = true
+                newUser.isAdmin = false
+
+                println 'validating'
+                if (!newUser.validate()) {
+
+                    res.code = 2
+                    res.value = 'Issues with Validation!'
+                    newUser.errors.allErrors.each {
+                        println it
+                    }
+                }
+                else{
+
+                    session['username'] = newUser.getUsername()
+
+                    if (newUser.isAdmin) {
+                        session['role'] = 'admin'
+                    } else {
+                        session['role'] = 'notAdmin'
+                    }
+
+                    newUser.save(failOnError: true, flush: true)
+                    res.value = 'You are successfully registered!'
+                    res.code = 0
+
+                    return res
+                }
+            }
 
     }
 
-    def getloginData(params, session){
 
-        Result res =  new Result();
+    def getLoginData(params, session){
 
-        UserData user1 = UserData.findByUsername(params.username);
-        res.code = 402
-        res.value = 'Username Taken'
+        Result res =  new Result()
 
+        UserData user1 = UserData.findByUsername(params.username)
 
         if (!user1){
             user1 = UserData.findByEmail(params.username)
-            res.value = 'Email Taken'
+        }
+
+        if(!user1){
+            res.code = 404
+            res.value = "Email/Username Not Found"
             return res
         }
-        if (user1){
-                if  (params.password == user1.password)
-                {
-//                    session['id'] = user1.getId() -- read only property
+        else{
+                if (params.password == user1.password){
+
                     session.username = user1.getUsername()
 
                     if (user1.isAdmin)
@@ -58,22 +116,16 @@ class HomeService {
                     res.value = 'Success'
                     res.user = user1
                     return res
-
-            }
-            else {
+                }
+                else {
                     println 'Incorrect credentials'
                     res.code = 401
-                    res.value = 'Incorrect credentials'
+                    res.value = "Incorrect credentials! Forgot Password?"
                     return res
-
-            }
-        }
-        else{
-            println 'You are not registered'
-            res.code = 404
-            res.value = 'Username/Email Not Found'
-            return res
+                }
         }
 
     }
+
+
 }

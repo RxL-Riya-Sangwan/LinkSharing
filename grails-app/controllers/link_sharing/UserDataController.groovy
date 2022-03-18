@@ -5,15 +5,13 @@ import grails.transaction.Transactional
 
 class UserDataController {
 
-    def dashboard(){
 
-    }
-
-    def profile(){
-
+    def profile(params){
+        println params
+//        render(view: 'profile')
     }
 
     def show(){
-e
+
     }
 }

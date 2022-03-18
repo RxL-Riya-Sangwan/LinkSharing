@@ -51,3 +51,10 @@ $("#confirmPassword").on("change keyup",
 });
 
 
+// $(".profile").onclick(function (e){
+//     let username = $(this).attr("data-id")
+//     let href = $(this).attr("href") + "?username=" + username
+//     console.log(href)
+// });
+
+

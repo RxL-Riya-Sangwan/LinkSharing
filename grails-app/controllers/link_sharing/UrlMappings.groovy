@@ -9,21 +9,8 @@ class UrlMappings {
             }
         }
 
-        "/"(controller: 'home', action: 'index')
+         "/register"(controller: 'home', action: 'register')
 
-//        "/forgotPassword"(controller: 'home', action: 'forgotPassword')
-//        "/userTable"(controller: 'home', action: 'userTable')
-
-
-//        "/user/dashboard"(controller: 'home', action: 'dashboard')
-//        "/user/profile/$id?"(controller: 'userData', action: 'profile')
-//        "/user/show/$id?"(controller: 'userData', action: 'show')
-
-
-
-        "500"(view:'/error')
-        "404"(view:'/notFound')
-//
         }
 
 

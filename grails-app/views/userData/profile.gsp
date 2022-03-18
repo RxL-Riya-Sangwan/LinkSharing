@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-     ${session['username']}'s Profilee
+     ${session['username']}'s Profile
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -86,7 +86,7 @@
             <div class="border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
-                        Trending Topics
+                        Topics
                         <a href="" class="rightF linkC">View All</a>
                     </div>
                     <div class="col-md-3">
@@ -119,11 +119,6 @@
                             <option value="Very Serious">Very Serious</option>
                             <option value="Serious">Serious</option>
                             <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
                         </select>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
@@ -162,11 +157,7 @@
                         <option value="Serious">Serious</option>
                         <option value="Casual">Casual</option>
                     </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
-                    </select>
+
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
@@ -209,11 +200,6 @@
                             <option value="Serious">Serious</option>
                             <option value="Casual">Casual</option>
                         </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
@@ -250,11 +236,6 @@
                         <option value="Very Serious">Very Serious</option>
                         <option value="Serious">Serious</option>
                         <option value="Casual">Casual</option>
-                    </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
                     </select>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                     <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>

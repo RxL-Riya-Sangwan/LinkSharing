@@ -20,7 +20,7 @@
 <body>
 <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
             LINK SHARING
         </a>
@@ -46,7 +46,7 @@
                         ${session['username'].toString().capitalize()}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="${createLink(controller: 'userData', action: 'profile')}">Profile</a></li>
                         %{--                                If user is admin show them following 3 items as well--}%
                         <g:if test="${session['role'] == 'admin'}">
                             <li><hr class="dropdown-divider"></li>
@@ -55,7 +55,8 @@
                             <li><a class="dropdown-item" href="#">Posts</a></li>
                             <li><hr class="dropdown-divider"></li>
                         </g:if>
-                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}">Logout</a></li>
+
+                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -66,7 +67,11 @@
         </div>
     </div>
 </nav>
-%{--${flash.message}--}%
+<g:if test="${flash.message}">
+    <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
+        ${flash.message}
+    </div>
+</g:if>
 <div class="container mt-2">
     <div class="row">
         <div class="col-sm-5">
@@ -78,7 +83,12 @@
                     <div class="col-md-9">
                         <div class="card-body">
                             <h5 class="card-title mb-0">${newUser.firstName} ${newUser.lastName}</h5>
-                            <p class="mb-4"> <small class="text-muted">@${newUser.username}</small></p>
+                            <p class="mb-4">
+                                <g:set var="hrefValue" value='${"userData/profile?username=" + "${newUser.username}"}'/>
+                                <a class="linkC profile" data-id="${newUser.username}" href="${hrefValue}">
+                                    <small class="text-muted profile">@${newUser.username}</small>
+                                </a>
+                            </p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
@@ -87,7 +97,12 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${topicList.size()}</small>
+                                        <g:if test="${topicList}">
+                                            <small>${topicList.size()}</small>
+                                        </g:if>
+                                        <g:else>
+                                            <small>0</small>
+                                        </g:else>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +125,11 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@${newUser.username}</small>
+                                        <p class="mb-4">
+                                            <a class="linkC" href="${createLink(controller: 'UserData', action: 'profile')}">
+                                                <small class="text-muted">@${newUser.username}</small>
+                                            </a>
+                                        </p>
                                         <p><a class="linkC" href="#">Unsubscribe</a></p>
                                     </div>
                                     <div class="col">
@@ -119,7 +138,12 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${topicList.size()}</small>
+                                        <g:if test="${topicList}">
+                                            <small>${topicList.size()}</small>
+                                        </g:if>
+                                        <g:else>
+                                            <small>0</small>
+                                        </g:else>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +175,11 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@${newUser.username}</small>
+                                        <p class="mb-4">
+                                            <a class="linkC" href="${createLink(controller: 'UserData', action: 'profile')}">
+                                                <small class="text-muted">@${newUser.username}</small>
+                                            </a>
+                                        </p>
                                         <p><a class="linkC" href="#">Unsubscribe</a></p>
                                     </div>
                                     <div class="col">
@@ -160,7 +188,12 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${topicList.size()}</small>
+                                        <g:if test="${topicList}">
+                                            <small>${topicList.size()}</small>
+                                        </g:if>
+                                        <g:else>
+                                            <small>0</small>
+                                        </g:else>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +241,7 @@
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${topicList.size()}</small>
+                                        <small>0</small>
                                     </div>
                                 </div>
                             </div>
@@ -316,11 +349,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <g:form controller="resourceData" action="create" enctype="multipart/form-data">
+                <g:form controller="resourceData" action="createDocument" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <label for="doc" class="col-sm-2 col-form-label">Document</label>
                         <div class="col-sm-10">
-                            <input type="file" class="custom-file-input form-control" id="doc" name="document" accept="application/pdf" required>
+%{--                            accept="application/pdf"--}%
+                            <input type="file" class="custom-file-input form-control" id="doc" name="filename" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -367,17 +401,17 @@
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <select class="form-select" aria-label="Select Topic" id="topic">
-                                <option selected disabled hidden>Select topic for this resource</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <g:select class="form-select" aria-label="Select Topic" id="topic" from="${topicList}" name="topic">
+%{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+%{--                                <option value="1">One</option>--}%
+%{--                                <option value="2">Two</option>--}%
+%{--                                <option value="3">Three</option>--}%
+                            </g:select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-outline-primary">Invite</button>
+                        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Invite</button>
                     </div>
                 </form>
             </div>
@@ -392,35 +426,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <g:form controller="resourceData" action="createLink">
                     <div class="row mb-3">
                         <label for="linkUrl" class="col-sm-2 col-form-label">Link</label>
                         <div class="col-sm-10">
-                            <input type="url" class="form-control" id="linkUrl" required>
+                            <input type="url" class="form-control" id="linkUrl" name="url" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="des" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="des" rows="3" required></textarea>
+                            <textarea class="form-control" id="des" rows="3" name="description" required></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <select class="form-select" aria-label="Select Topic" id="topic">
-                                <option selected disabled hidden>Select topic for this resource</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <g:select class="form-select" aria-label="Select Topic" id="topic" from="${topicList}" name="topic">
+%{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+%{--                                <option value="1">One</option>--}%
+%{--                                <option value="2">Two</option>--}%
+%{--                                <option value="3">Three</option>--}%
+                            </g:select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-outline-primary">Share</button>
+                        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Share</button>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>

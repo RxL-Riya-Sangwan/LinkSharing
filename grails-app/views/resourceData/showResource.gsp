@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-        Topic List
+    Resource List
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -17,13 +17,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        html, body{
-            background-color: aliceblue;
-        }
+    html, body{
+        background-color: aliceblue;
+    }
     </style>
 </head>
 <body>
-    <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
+<nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
@@ -35,7 +35,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-%{--                    <a href="${createLink()}" class="nav-link">Home</a>--}%
+                    %{--                    <a href="${createLink()}" class="nav-link">Home</a>--}%
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -67,35 +67,35 @@
         ${flash.message}
     </div>
 </g:if>
-    <div class="container">
-        <div class="row">
-            <div class="col-1">
-            </div>
-            <div class="col-10">
-                <table class="shadowC border-dark table table-hover table-striped table-bordered table-responsive">
-                    <thead style="background-color: #191c1f; color: white">
+<div class="container">
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-10">
+            <table class="shadowC border-dark table table-hover table-striped table-bordered table-responsive">
+                <thead style="background-color: #191c1f; color: white">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">RESOURCE</th>
+                    <th scope="col">TOPIC</th>
+                </tr>
+                </thead>
+                <tbody>
+                <g:set var="counter" value="${1}"/>
+                <g:each in="${resourceList}">
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col">TOPIC NAME</th>
-                        <th scope="col">VISIBILITY</th>
+                        <th scope="row">${counter}</th>
+                        <td>${it.description}</td>
+                        <td>${it.topic}</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <g:set var="counter" value="${1}"/>
-                    <g:each in="${topicList}">
-                        <tr>
-                            <th scope="row">${counter}</th>
-                            <td>${it.name.capitalize()}</td>
-                            <td>${it.visibility}</td>
-                        </tr>
-                        <g:set var="counter" value="${counter + 1}" />
-                    </g:each>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-1">
-            </div>
+                    <g:set var="counter" value="${counter + 1}" />
+                </g:each>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-1">
         </div>
     </div>
+</div>
 </body>
 </html>

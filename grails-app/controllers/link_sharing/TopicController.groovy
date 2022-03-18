@@ -11,7 +11,8 @@ class TopicController {
     def create(){
         // Check if this topic name already exists for user
             UserData usr = UserData.findByUsername(session['username'])
-            Topic newTopic = Topic.findByUserdataAndName(usr, params.name)
+            Topic newTopic = Topic.findByNameAndCreatedBy(params.name, usr)
+//            Topic newTopic = Topic.findByUserdataAndName(usr, params.name)
 
             if (newTopic){
                 println 'same name topic'
@@ -20,13 +21,16 @@ class TopicController {
 
             }else{
                 println 'creating topic'
+                println params
                 Topic topic = new Topic(params);
                 // Why it's not binding name and date automatically??
-                topic.name = params.name
-                topic.userdata = usr
-                topic.dateCreated = new Date()
-                topic.lastUpdated = new Date()
+//                topic.name = params.name
+//                topic.userdata = usr
+//                topic.dateCreated = new Date()
+//                topic.lastUpdated = new Date()
 
+//                topic.createdBy(usr)
+                usr.addToTopics(topic)
                 println "${topic.properties}"
 
                 if(!topic.validate()){
@@ -54,9 +58,9 @@ class TopicController {
 
     def show(params){
         UserData usr = UserData.findByUsername(session['username'])
-        List <Topic> topicList = Topic.findAllByUserdata(usr)
+        List <Topic> topicList = Topic.findAllByCreatedBy(usr)
         if (!topicList){
-            render(view: 'showTopic', model: [topicList: []])
+            topicList = []
         }
         render(view: 'showTopic', model: [topicList: topicList])
     }

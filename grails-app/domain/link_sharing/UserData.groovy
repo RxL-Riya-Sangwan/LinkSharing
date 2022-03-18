@@ -6,7 +6,7 @@ class UserData {
     String password;
     String firstName;
     String lastName;
-    Byte[] photo;
+    String photo;
     Boolean isAdmin;
     Boolean isActive;
     Date dateCreated;
@@ -17,10 +17,11 @@ class UserData {
     static constraints = {
         username(unique: true)
         email(unique: true);
-        photo(nullable: true, blank: true, maxSize: 1024 * 1024 * 25);
+//        photo(nullable: true, blank: true, maxSize: 1024 * 1024 * 25);
         password(minSize: 8);
         isAdmin(nullable: true)
         isActive(nullable: true)
+        photo(nullable: true)
     }
 
     static mapping = {

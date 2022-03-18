@@ -1,8 +1,8 @@
 package link_sharing
 
 class ResourceRating {
-//    ResourceData res;
-//    UserData usr;
+    ResourceData resourcedata;
+    UserData userdata;
     Integer score;
 
     static belongsTo = [userdata: UserData, resourcedata: ResourceData];

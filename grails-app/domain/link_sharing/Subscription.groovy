@@ -2,8 +2,8 @@ package link_sharing
 
 
 class Subscription {
-//    Topic topic;
-//    UserData user;
+    Topic topic;
+    UserData userdata;
     Seriousness seriousness;
     Date dateCreated;
 
