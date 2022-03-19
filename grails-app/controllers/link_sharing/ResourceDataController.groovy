@@ -39,17 +39,18 @@ class ResourceDataController {
     def createDocument(){
 
         def f = request.getFile('file')
-        f.transferTo(new File('file.pdf'))
+        
 
 
         UserData usr = UserData.findByUsername(session['username'])
+        f.transferTo(new File("/home/nitin/RiyaS/LinkSharing/grails-app/assets/${usr.username}.pdf"))
         DocumentResource newResource = new DocumentResource()
         bindData(newResource,params, [exclude: ['topic', 'file']])
         usr.addToResourcedata(newResource)
         Topic topic = Topic.findByName(params.topic)
         topic.addToResourcedata(newResource)
 
-        newResource.filePath = '/tmp/file.pdf'
+        newResource.filePath = "/home/nitin/RiyaS/LinkSharing/grails-app/assets/${usr.username}.pdf"
 
         if(!newResource.validate()){
             println 'validating'
