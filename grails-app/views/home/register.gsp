@@ -27,7 +27,7 @@
     </div>
 </nav>
     <g:if test="${flash.message}">
-        <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
+        <div class="alert alert-success text-center flash" role="alert" style="font-family: monospace">
             ${flash.message}
         </div>
     </g:if>
@@ -75,12 +75,12 @@
                                 <label for="password">Password</label>
                                 <input minlength="8" maxlength="12" type="password" placeholder="Must be of 8 to 20 characters" class="form-control" name="password" id="password" required />
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label for="confirmPassword">Confirm Password</label>
                                 <input minlength="8" maxlength="12" type="password" class="form-control" name="confirmPassword" id="confirmPassword" required />
                             </div>
                             <div class="mb-2">
-                                <label for="Picture">Picture <small class="text-muted">(Size < 25MB)</small> </label>
+                                <label for="Picture">Picture<small class="text-muted">(Size < 25MB)</small> </label><br>
                                 <input type="file" class="form-control-file" id="Picture" name="photo" accept="image/jpg, image/png, image/*">
                             </div>
                             <div class="mb-2">

@@ -1,10 +1,11 @@
+<%@ page import="link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Visibility" %>
 <!Doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-     ${session['username']}'s Profile
+     ${session['username'].toString().capitalize()}'s Profile
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -29,8 +30,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        ${session['username']}
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ${session['username'].toString().capitalize()}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -57,7 +58,7 @@
 <div class="container mt-2">
     <div class="row">
         <div class="col-sm-5">
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="col-md-3">
                         %{--                                Retrieve image if present --}%
@@ -65,17 +66,17 @@
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title mb-0">Uday Pratap Singh</h5>
-                            <p class="mb-4"> <small class="text-muted">@Uday</small></p>
+                            <h5 class="card-title mb-0">${usr.firstName} ${usr.lastName}</h5>
+                            <p class="mb-4"> <small class="text-muted">@${usr.username}</small></p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${subscriptionList.size()}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${topicList.size()}</small>
                                     </div>
                                 </div>
                             </div>
@@ -83,179 +84,102 @@
                     </div>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         Topics
-                        <a href="" class="rightF linkC">View All</a>
+                        <a href="${createLink(controller: 'topic', action: 'show')}" class="rightF linkC">View All</a>
                     </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                    </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
+                    <g:each var="topic" in="${topicList.take(5).sort{it.dateCreated}}">
+                        <g:if test="${topic.visibility == Visibility.Public}" >
+                            <div class="col">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-around">
+                                        <div>
+                                            <p class="card-title">${topic.name.capitalize()}</p>
+                                            <p><a class="linkC" href="#">Subscribe</a></p>
+                                        </div>
+                                        <div>
+                                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                                        </div>
+                                        <div>
+                                            <p class="linkC">Subscriptions</p>
+                                            <small>${Subscription.findAllByTopic(topic).size()}</small>
+                                        </div>
+                                        <div>
+                                            <p class="linkC">Posts</p>
+                                            <small>${ResourceData.findAllByTopic(topic).size()}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
+                            <hr>
+                        </g:if>
+                    </g:each>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         Subscriptions
-                        <a href="" class="rightF linkC">View All</a>
+                        <a href="${createLink(controller: 'topic', action: 'show')}" class="rightF linkC">View All</a>
                     </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
+                    <div class="col">
                         <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
+                            <div class="d-flex justify-content-around">
+                                <div>
+                                    <p class="card-title">Grails</p>
+                                    <p><a class="linkC" href="#">Subscribe</a></p>
+                                </div>
+                                <div>
+                                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                                </div>
+                                <div>
+                                    <p class="linkC">Subscriptions</p>
+                                    <small>32</small>
+                                </div>
+                                <div>
+                                    <p class="linkC">Topics</p>
+                                    <small>5</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                     </div>
                     <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
+                    <div class="col">
                         <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
+                            <div class="d-flex justify-content-around">
+                                <div>
+                                    <p class="card-title">Grails</p>
+                                    <p><a class="linkC" href="#">Subscribe</a></p>
+                                </div>
+                                <div>
+                                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                                </div>
+                                <div>
+                                    <p class="linkC">Subscriptions</p>
+                                    <small>32</small>
+                                </div>
+                                <div>
+                                    <p class="linkC">Topics</p>
+                                    <small>5</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                 </div>
             </div>
         </div>
         <div class="col-sm-7">
-            <div class="border-dark card text-dark bg-light" >
+            <div class="shadowC border-dark card text-dark bg-light" >
                 <div class="row g-0">
                     <div class="card-header">
                         Inbox
                         <a href="" class="rightF linkC">View All</a>
                     </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
+                    <div class="col">
+                        <div class="card-body px-5">
+                            <h5 class="card-title mb-2 me-1"><a class="linkC" href="#">Grails</a></h5>
                             <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
                             nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
@@ -429,6 +353,7 @@
         </div>
     </div>
 </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <asset:javascript src="app.js" />
 </body>
 </html>

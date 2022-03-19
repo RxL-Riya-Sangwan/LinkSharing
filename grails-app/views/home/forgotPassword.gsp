@@ -26,7 +26,7 @@
     </div>
 </nav>
 <g:if test="${flash.message}">
-    <div class="alert alert-success text-center font-monospace" role="alert">
+    <div class="alert alert-success text-center font-monospace flash" role="alert">
         ${flash.message}
     </div>
 </g:if>

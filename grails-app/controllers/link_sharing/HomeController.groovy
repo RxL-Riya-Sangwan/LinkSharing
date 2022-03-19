@@ -11,36 +11,38 @@ class HomeController {
 
     def homeService
 
-    def beforeInterceptor = [action: this.&auth, except: ['login', 'register']]
+//    def beforeInterceptor = [action: this.&auth, except: ['login', 'register']]
 
-    private auth(){
-        if(!session['username']){
-            println 'In Auth'
-            redirect(action: 'login')
-            return false
-        }
-    }
+//    private auth(){
+//        if(!session['username']){
+////            println 'In Auth'
+//            redirect(action: 'login')
+//            return false
+//        }
+//    }
 
     def index(){
 
-            println 'In Home, Index'
-            UserData usr = UserData.findByUsername(session['username'])
-            List <Topic> topicList = Topic.findAllByCreatedBy(usr)
-            if (!topicList){
-                topicList = []
-            }
-            render(view: 'dashboard', model: [newUser: usr, topicList: topicList])
+         if(!session['username']){
+             redirect(action: 'login')
+         }
+        else{
+             UserData usr = UserData.findByUsername(session['username'])
+             List <Topic> topicList = Topic.findAllByCreatedBy(usr)
+             if (!topicList){
+                 topicList = []
+             }
+             render(view: 'dashboard', model: [newUser: usr, topicList: topicList])
+         }
     }
 
     @Transactional
     def register() {
         if (request.method == 'GET') {
-            println 'In register get'
             render(view: 'register')
         }
         else {
 
-            println 'register Post'
             Result res = homeService.getRegisterData(params, session)
 
             if(res.code == 1){
@@ -60,11 +62,9 @@ class HomeController {
     @Transactional
     def login(){
         if (request.method == 'GET'){
-            println 'login'
             render(view: 'home')
         }
         else{
-            println 'login post'
             Result result  = homeService.getLoginData(params, session)
 
                 if(result.code == 404){
@@ -103,12 +103,12 @@ class HomeController {
 
     @Transactional
     def logout(){
-        println 'logout'
+//        println 'logout'
         session.invalidate();
 //        Session session = sessionFactory.currectsession
 //        session.flush()
 //        session.clear()
         flash.message = "You're logged out!"
-        redirect(controller: 'home', action: 'index')
+        redirect(controller: 'home', action: 'login')
     }
 }

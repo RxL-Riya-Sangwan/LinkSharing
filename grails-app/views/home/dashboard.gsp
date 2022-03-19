@@ -68,7 +68,7 @@
     </div>
 </nav>
 <g:if test="${flash.message}">
-    <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
+    <div class="alert alert-success text-center flash" role="alert" style="font-family: monospace">
         ${flash.message}
     </div>
 </g:if>
@@ -84,10 +84,9 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0">${newUser.firstName} ${newUser.lastName}</h5>
                             <p class="mb-4">
-                                <g:set var="hrefValue" value='${"userData/profile?username=" + "${newUser.username}"}'/>
-                                <a class="linkC profile" data-id="${newUser.username}" href="${hrefValue}">
+                                <g:link class="linkC">
                                     <small class="text-muted profile">@${newUser.username}</small>
-                                </a>
+                                </g:link>
                             </p>
                             <div class="container">
                                 <div class="row">
@@ -354,7 +353,7 @@
                         <label for="doc" class="col-sm-2 col-form-label">Document</label>
                         <div class="col-sm-10">
 %{--                            accept="application/pdf"--}%
-                            <input type="file" class="custom-file-input form-control" id="doc" name="filename" required>
+                            <input type="file" class="custom-file-input form-control" id="doc" name="file" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -492,6 +491,7 @@
         </div>
     </div>
 </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <asset:javascript src="app.js" />
 </body>
 </html>

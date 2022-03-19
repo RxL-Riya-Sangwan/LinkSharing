@@ -43,10 +43,11 @@
         </div>
     </nav>
     <g:if test="${flash.message}">
-        <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
+        <div class="alert alert-success text-center flash" role="alert" style="font-family: monospace">
             ${flash.message}
         </div>
-    </g:if>    <div class="container mt-2">
+    </g:if>
+    <div class="container mt-2">
             <div class="row">
                 <div class="col-sm-7">
                     <div class="shadowC mb-3 border-dark card text-dark bg-light" >
@@ -136,50 +137,16 @@
                         <div class="card-header">
                             Login
                         </div>
-%{--                        <g:form class="m-2 p-3" url="[controller: 'home', action: 'register']" method="post">--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="firstName">First Name</label>--}%
-%{--                                <g:textField autocomplete="off" class="form-control" name="firstName" id="firstName" required="true"/>--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="lastName">Last Name</label>--}%
-%{--                                <g:textField autocomplete="off" class="form-control" name="lastName" id="lastName" required="true"/>--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="emailID">Email ID</label>--}%
-%{--                                <input type="email" autocomplete="off" class="form-control" name="email" id="emailID" required />--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="userName">Username</label>--}%
-%{--                                <g:textField autocomplete="off" class="form-control" name="username" id="username" required="true"/>--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="password">Password</label>--}%
-%{--                                <input minlength="8" maxlength="12" type="password" placeholder="Must be of 8 to 20 characters" class="form-control" name="password" id="password" required />--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-3">--}%
-%{--                                <label for="confirmPassword">Confirm Password</label>--}%
-%{--                                <input minlength="8" maxlength="12" type="password" class="form-control" name="confirmPassword" id="confirmPassword" required />--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <label for="Picture">Picture <small class="text-muted">(Size < 25MB)</small> </label>--}%
-%{--                                <input type="file" class="form-control-file" id="Picture" name="photo" accept="image/jpg, image/png, image/*">--}%
-%{--                            </div>--}%
-%{--                            <div class="mb-2">--}%
-%{--                                <p id="msg"></p>--}%
-%{--                            </div>--}%
-%{--                            <button class="btn btn-outline-dark" type="submit" name="Register" id="submitButton">Register</button>--}%
-%{--                        </g:form>--}%
                         <div class="card-body">
                             <g:form class="m-2 p-4" url="[controller: 'home', action: 'login']" method="post">
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="UserName">Username/Email</label>
                                     <g:textField autocomplete="off" class="form-control" name="username" id="UserName" required="true"/>
                                     <a href="${createLink(action: 'forgotPassword')}" class="small rightF linkC">
                                         Forgot Password?
                                     </a>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <label for="Password">Password</label>
                                     <g:passwordField placeholder="Must be of 8 to 20 characters" class="form-control" name="password" id="Password" required="true"/>
                                 </div>

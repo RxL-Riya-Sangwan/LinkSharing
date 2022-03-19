@@ -1,43 +1,5 @@
-// For Password checking at client side
 
-// $("#Confirm_Password").keyup(function (){
-//     if($("#Password").val == $("#Confirm_Password").val){
-//         $("#msg").text("Matching").css('color', 'green');
-//     } else{
-//         $("#msg").text("Not Matching").css('color', 'red');   // not coming here for checking
-//     }
-// });
-
-
-// For making pop login form
-// $("LOGIN_FORM").click(
-// //     function(){
-// //         $("REGISTER_FORM").remove();
-// // }
-//     $("register_form").display = none;
-// );
-
-
-// File Upload
-
-// let loginForm = document.getElementById("loginForm");
-// let registerForm = document.getElementById("registerForm");
-//
-// loginForm.onclick(function(){
-//     console.log("clicked")
-//     // registerForm.css.display = none;
-// })
-
-
-// For login form
-// let loginForm = document.getElementById("loginForm");
-// loginForm.addEventListener("onclick", function (){
-//     console.log("clicked");
-// });
-
-
-
-// For password matching
+// For password matching -- client Side
 $("#confirmPassword").on("change keyup",
     function(){
         if($("#password").val() == $("#confirmPassword").val()){
@@ -58,3 +20,29 @@ $("#confirmPassword").on("change keyup",
 // });
 
 
+function flashFade(){
+    $(".flash").fadeOut('normal', 'swing');
+}
+
+$(document).ready(function (){
+        setTimeout(flashFade, 3000);
+});
+
+
+$('.profile').click(function (){
+    let username = this.textContent.slice(1,);
+    let data = {};
+    let url = '<g:link controller="userData" action="profile" />';
+    data.username = username;
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: data,
+        success: function (result){
+            alert('ok');
+        },
+        error: function (result){
+            alert('not okay');
+        }
+    });
+});

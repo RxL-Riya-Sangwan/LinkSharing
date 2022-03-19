@@ -1,18 +1,17 @@
 package link_sharing
 
-import static org.springframework.http.HttpStatus.*
+
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class TopicController {
 
-    static allowedMethods = ['create': ['GET', 'POST']]
+    static allowedMethods = ['create': ['GET', 'POST'], 'show': ['GET']]
 
     def create(){
-        // Check if this topic name already exists for user
+
             UserData usr = UserData.findByUsername(session['username'])
             Topic newTopic = Topic.findByNameAndCreatedBy(params.name, usr)
-//            Topic newTopic = Topic.findByUserdataAndName(usr, params.name)
 
             if (newTopic){
                 println 'same name topic'
@@ -21,30 +20,19 @@ class TopicController {
 
             }else{
                 println 'creating topic'
-                println params
-                Topic topic = new Topic(params);
-                // Why it's not binding name and date automatically??
-//                topic.name = params.name
-//                topic.userdata = usr
-//                topic.dateCreated = new Date()
-//                topic.lastUpdated = new Date()
 
-//                topic.createdBy(usr)
+                Topic topic = new Topic(params);
                 usr.addToTopics(topic)
-                println "${topic.properties}"
 
                 if(!topic.validate()){
                     println 'validating'
+                    if(topic.hasErrors()){
+                        topic.errors.allErrors.each{
+                            println(it)
+                        }
+                    }
                     response.status = 404
-                    flash.message = 'Issues with Validation!'
-                    redirect(action: 'show')
-                }
-                else if (topic == null){
-                    println 'Null Object'
-                    redirect(action: 'show')
-                }
-                else if (topic.hasErrors()){
-                    println topic.errors
+                    println 'Issues with Validation!'
                     redirect(action: 'show')
                 }
                 else{
@@ -54,15 +42,17 @@ class TopicController {
                 }
 
             }
+
     }
 
-    def show(params){
+    def show(){
+
         UserData usr = UserData.findByUsername(session['username'])
         List <Topic> topicList = Topic.findAllByCreatedBy(usr)
         if (!topicList){
             topicList = []
         }
-        render(view: 'showTopic', model: [topicList: topicList])
+        render(view: 'show', model: [topicList: topicList])
     }
 }
 

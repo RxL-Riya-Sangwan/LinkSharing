@@ -9,7 +9,7 @@ class UrlMappings {
             }
         }
 
-         "/register"(controller: 'home', action: 'register')
+         "/"(controller: 'home', action: 'index')
 
         }
 
