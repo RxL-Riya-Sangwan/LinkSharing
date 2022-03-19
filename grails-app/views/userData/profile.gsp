@@ -124,49 +124,30 @@
                         Subscriptions
                         <a href="${createLink(controller: 'topic', action: 'show')}" class="rightF linkC">View All</a>
                     </div>
-                    <div class="col">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-around">
-                                <div>
-                                    <p class="card-title">Grails</p>
-                                    <p><a class="linkC" href="#">Subscribe</a></p>
-                                </div>
-                                <div>
-                                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                                </div>
-                                <div>
-                                    <p class="linkC">Subscriptions</p>
-                                    <small>32</small>
-                                </div>
-                                <div>
-                                    <p class="linkC">Topics</p>
-                                    <small>5</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="col">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-around">
-                                <div>
-                                    <p class="card-title">Grails</p>
-                                    <p><a class="linkC" href="#">Subscribe</a></p>
-                                </div>
-                                <div>
-                                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                                </div>
-                                <div>
-                                    <p class="linkC">Subscriptions</p>
-                                    <small>32</small>
-                                </div>
-                                <div>
-                                    <p class="linkC">Topics</p>
-                                    <small>5</small>
+                    <g:each var="subscription" in="${subscriptionList.take(5).sort{it.dateCreated}}">
+                            <div class="col">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-around">
+                                        <div>
+                                            <p class="card-title">${subscription.topic.name.capitalize()}</p>
+                                            <p><a class="linkC" href="#">Subscribe</a></p>
+                                        </div>
+                                        <div>
+                                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                                        </div>
+                                        <div>
+                                            <p class="linkC">Subscriptions</p>
+                                            <small>${Subscription.findAllByTopic(subscription.topic).size()}</small>
+                                        </div>
+                                        <div>
+                                            <p class="linkC">Posts</p>
+                                            <small>${ResourceData.findAllByTopic(subscription.topic).size()}</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                            <hr>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -174,26 +155,27 @@
             <div class="shadowC border-dark card text-dark bg-light" >
                 <div class="row g-0">
                     <div class="card-header">
-                        Inbox
+                        Posts
                         <a href="" class="rightF linkC">View All</a>
                     </div>
-                    <div class="col">
-                        <div class="card-body px-5">
-                            <h5 class="card-title mb-2 me-1"><a class="linkC" href="#">Grails</a></h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <g:each var="post" in="${resourceDataList.take(5).sort{it.dateCreated}}">
+                        <div class="col">
+                            <div class="card-body px-5 pb-3 pt-3">
+                                <h5 class="card-title mb-4 me-1"><a class="linkC" href="#">${post.topic.name.capitalize()}</a></h5>
+                                <p class="card-text">${post.description}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="hstack card-footer d-flex justify-content-evenly">
-                        <a href="#" class="linkC"><i class="bi bi-google"></i></a>
-                        <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                        <a href="#" class="linkC">Download</a>
-                        <a href="#" class="linkC">View Full Site</a>
-                        <a href="#" class="linkC">Mark as Read</a>
-                        <a href="#" class="linkC">View Post</a>
-                    </div>
+                        <div class="hstack card-footer d-flex justify-content-evenly">
+                            <a href="#" class="linkC"><i class="bi bi-google"></i></a>
+                            <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
+                            <a href="#" class="linkC">Download</a>
+                            <a href="#" class="linkC">View Full Site</a>
+                            <a href="#" class="linkC">Mark as Read</a>
+                            <a href="#" class="linkC">View Post</a>
+                        </div>
+                        <hr>
+                    </g:each>
                 </div>
             </div>
         </div>
