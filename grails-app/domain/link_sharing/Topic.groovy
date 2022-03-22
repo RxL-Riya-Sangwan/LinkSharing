@@ -14,6 +14,10 @@ class Topic {
 //        name(unique: true)
     }
 
+//    static mapping = {
+//        resourcedata cascade: 'all-delete-orphan'
+//    }
+
     @Override
     String toString() {
         return name

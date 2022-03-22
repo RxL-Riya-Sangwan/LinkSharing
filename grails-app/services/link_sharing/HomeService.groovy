@@ -16,58 +16,55 @@ class Result{
 @Transactional
 class HomeService {
 
-//    def sessionFactory
-
-    def getRegisterData(params, session) {
-
+    def getRegisterData(params, session)
+    {
             Result res = new Result()
-
             UserData user1 = UserData.findByEmail(params.email)
 
-            if (user1) {
-                println 'Email taken'
+            if (user1)
+            {
                 res.value = 'Email already taken'
                 res.code = 1
+                return res
             }
 
             user1 = UserData.findByUsername(params.username)
 
-            if (user1) {
-                println 'Username taken'
+            if (user1)
+            {
                 res.value = 'Username already taken'
                 res.code = 1
+                return res
             }
-            else if (params.password != params.confirmPassword) {
-
+            else if (params.password != params.confirmPassword)
+            {
                 res.value = 'Password do not match'
                 res.code = 1
-
+                return res
             }
-            else {
-
-                println 'creating new object'
-                println params
-
+            else
+            {
                 UserData newUser = new UserData(params)
                 newUser.isActive = true
                 newUser.isAdmin = false
 
-                println 'validating'
-                if (!newUser.validate()) {
-
+                if (!newUser.validate())
+                {
                     res.code = 2
                     res.value = 'Issues with Validation!'
                     newUser.errors.allErrors.each {
                         println it
                     }
                 }
-                else{
-
+                else
+                {
                     session['username'] = newUser.getUsername()
 
-                    if (newUser.isAdmin) {
+                    if (newUser.isAdmin)
+                    {
                         session['role'] = 'admin'
-                    } else {
+                    } else
+                    {
                         session['role'] = 'notAdmin'
                     }
 
@@ -78,7 +75,6 @@ class HomeService {
                     return res
                 }
             }
-
     }
 
 
@@ -97,7 +93,8 @@ class HomeService {
             res.value = "Email/Username Not Found"
             return res
         }
-        else{
+        else
+        {
                 if (params.password == user1.password){
 
                     session.username = user1.getUsername()
@@ -111,14 +108,13 @@ class HomeService {
                         session.role = 'notAdmin'
                     }
 
-                    println "${session.username}"
                     res.code = 200
-                    res.value = 'Success'
+                    res.value = "You're logged In"
                     res.user = user1
                     return res
                 }
-                else {
-                    println 'Incorrect credentials'
+                else
+                {
                     res.code = 401
                     res.value = "Incorrect credentials! Forgot Password?"
                     return res

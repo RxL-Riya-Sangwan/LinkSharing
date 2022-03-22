@@ -1,4 +1,4 @@
-<%@ page import="link_sharing.Seriousness; link_sharing.Visibility" %>
+<%@ page import="link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Seriousness; link_sharing.Visibility" %>
 <!Doctype html>
 <html>
 <head>
@@ -56,7 +56,7 @@
                             <li><hr class="dropdown-divider"></li>
                         </g:if>
 
-                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}}">Logout</a></li>
+                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -72,10 +72,15 @@
         ${flash.message}
     </div>
 </g:if>
+<g:if test="${flash.warning}">
+    <div class="alert alert-danger text-center flash" role="alert" style="font-family: monospace">
+        ${flash.warning}
+    </div>
+</g:if>
 <div class="container mt-2">
     <div class="row">
         <div class="col-sm-5">
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
@@ -84,18 +89,20 @@
                         <div class="card-body">
                             <h5 class="card-title mb-0">${newUser.firstName} ${newUser.lastName}</h5>
                             <p class="mb-4">
-                                <g:link class="linkC">
-                                    <small class="text-muted profile">@${newUser.username}</small>
-                                </g:link>
+                                <g:link class="linkC" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${newUser.username}</small></g:link>
                             </p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>34</small>
+                                        <p>
+                                        <g:link class="linkC" controller="subscription" action="show">Subscriptions</g:link>
+                                        </p>
+                                        <small>${subList.size()}</small>
                                     </div>
                                     <div class="col">
-                                        <p class="linkC">Topics</p>
+                                        <p>
+                                            <g:link class="linkC" controller="topic" action="list">Topics</g:link>
+                                        </p>
                                         <g:if test="${topicList}">
                                             <small>${topicList.size()}</small>
                                         </g:if>
@@ -109,138 +116,103 @@
                     </div>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         Trending Topics
-                        <a href="" class="rightF linkC">View All</a>
+                        <g:link class="linkC rightF" controller="topic" action="show">View All</g:link>
                     </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <p class="mb-4">
-                                            <a class="linkC" href="${createLink(controller: 'UserData', action: 'profile')}">
-                                                <small class="text-muted">@${newUser.username}</small>
-                                            </a>
-                                        </p>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>12</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <g:if test="${topicList}">
-                                            <small>${topicList.size()}</small>
-                                        </g:if>
-                                        <g:else>
-                                            <small>0</small>
-                                        </g:else>
+                    <g:each var="topic" in="${trendingList.take(5)}">
+                        <hr>
+                        <div class="col-md-3">
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <g:link class="topicLink" controller="topic" action="topicShow" params="[topicName: topic.name]">
+                                        ${topic.name}</g:link>
+                                </h5>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="mb-4">
+                                                <g:link class="topicLink" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${newUser.username}</small></g:link>
+                                            </p>
+                                            <p>
+                                                <g:if test="${Subscription.findByTopicAndUserdata(topic, newUser)}">
+                                                    <g:link class="linkC" controller="Subscription" action="unsubscribe" params="[topic: topic.name, username: newUser.username, subscription: Subscription.findByTopicAndUserdata(topic, newUser).id]">
+                                                        Unsubscribe
+                                                    </g:link>
+                                                </g:if>
+                                                <g:else>
+                                                    <g:link class="linkC" controller="Subscription" action="subscribe" params="[topic: topic.name, username: newUser.username]">
+                                                        Subscribe
+                                                    </g:link>
+                                                </g:else>
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="linkC">Subscriptions</p>
+                                            <small>${Subscription.findAllByTopic(topic).size()}</small>
+                                        </div>
+                                        <div class="col">
+                                            <p class="linkC">Posts</p>
+                                                <small>${ResourceData.findAllByTopic(topic).size()}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer hstack">
-                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness">
-%{--                            <option selected disabled hidden>Seriousness</option>--}%
-%{--                            <option value="Very Serious">Very Serious</option>--}%
-%{--                            <option value="Serious">Serious</option>--}%
-%{--                            <option value="Casual">Casual</option>--}%
-                        </g:select>
-                        <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility">
-%{--                            <option selected disabled hidden>Visibility</option>--}%
-%{--                            <option value="Private">Private</option>--}%
-%{--                            <option value="Public">Public</option>--}%
-                        </g:select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                    </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <p class="mb-4">
-                                            <a class="linkC" href="${createLink(controller: 'UserData', action: 'profile')}">
-                                                <small class="text-muted">@${newUser.username}</small>
-                                            </a>
-                                        </p>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <g:if test="${topicList}">
-                                            <small>${topicList.size()}</small>
-                                        </g:if>
-                                        <g:else>
-                                            <small>0</small>
-                                        </g:else>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="card-footer hstack">
+                            <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness" />
+                            <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility"/>
+
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                         </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" name="seriousness" from="${Seriousness}">
-%{--                        <option selected disabled hidden>Seriousness</option>--}%
-%{--                        <option value="Very Serious">Very Serious</option>--}%
-%{--                        <option value="Serious">Serious</option>--}%
-%{--                        <option value="Casual">Casual</option>--}%
-                    </g:select>
-                    <g:select class="form-select m-1" aria-label="Select Topic" id="visiblity" name="visibility" from="${Visibility}">
-%{--                        <option selected disabled hidden>Visibility</option>--}%
-%{--                        <option value="Private">Private</option>--}%
-%{--                        <option value="Public">Public</option>--}%
-                    </g:select>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
+                    </g:each>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         Subscriptions
-                        <a href="" class="rightF linkC">View All</a>
+                       <g:link controller="subscription" action="show" class="rightF linkC">View All</g:link>
                     </div>
+                    <g:each var="sub" in="${subList.take(5).sort{it.topic.lastUpdated}}">
+                        <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
+                            <h5 class="card-title">${sub.topic.name.capitalize()}</h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@${newUser.username}</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
+%{--                                        <g:link class="linkC" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${newUser.username}</small></g:link>--}%
+%{--                                        <p>--}%
+%{--                                            <g:if test="${Subscription.findByTopicAndUserdata(topic, newUser)}">--}%
+%{--                                                <g:link class="linkC" controller="Subscription" action="unsubscribe" params="[topic: topic.name, username: newUser.username]">--}%
+%{--                                                    Unsubscribe--}%
+%{--                                                </g:link>--}%
+%{--                                            </g:if>--}%
+%{--                                            <g:else>--}%
+%{--                                                <g:link class="linkC" controller="Subscription" action="subscribe" params="[topic: topic.name, username: newUser.username]">--}%
+%{--                                                    Subscribe--}%
+%{--                                                </g:link>--}%
+%{--                                            </g:else>--}%
+%{--                                        </p>--}%
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${Subscription.findAllByTopic(sub.getTopic()).size()}</small>
                                     </div>
                                     <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>0</small>
+                                        <p class="linkC">Posts</p>
+                                        <small>${ResourceData.findAllByTopic(sub.getTopic()).size()}</small>
                                     </div>
                                 </div>
                             </div>
@@ -262,77 +234,42 @@
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
                         <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                     </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@${newUser.username}</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness"/>
-%{--                        <option selected disabled hidden>Seriousness</option>--}%
-%{--                        <option value="Very Serious">Very Serious</option>--}%
-%{--                        <option value="Serious">Serious</option>--}%
-%{--                        <option value="Casual">Casual</option>--}%
-%{--                    </g:select>--}%
-                    <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" name="visibility" from="${Visibility}" />
-%{--                        <option selected disabled hidden>Visibility</option>--}%
-%{--                        <option value="Private">Private</option>--}%
-%{--                        <option value="Public">Public</option>--}%
-%{--                    </g:select>--}%
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
+                    </g:each>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
-            <div class="border-dark card text-dark bg-light" >
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6">
+            <div class="shadowC border-dark card text-dark bg-light" >
                 <div class="row g-0">
                     <div class="card-header">
                         Inbox
-                        <a href="" class="rightF linkC">View All</a>
+                        <g:link controller="readingItem" action="show" class="rightF linkC">View All</g:link>
                     </div>
+                    <g:each var="post" in="${readingList.take(5)}">
+                        <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title mb-2 me-1">${newUser.firstName} ${newUser.lastName} <small class="text-muted">@${newUser.username} 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            <h6 class="card-title px-2">${post.createdBy.firstName} ${post.createdBy.lastName} <small class="text-muted small">@${post.createdBy.username} ${(new Date() - post.dateCreated)*24} hrs</small>
+                                <g:link controller="topic" action="topicShow" params="[topicName: post.topic.name]" class="linkC rightF small">${post.topic.name.capitalize()}</g:link>
+                            </h6>
+                            <p class="card-text small pt-2 px-2">${post.description.capitalize()}</p>
                         </div>
                     </div>
-                    <div class="hstack card-footer d-flex justify-content-evenly">
+                    <div class="hstack card-footer d-flex justify-content-evenly small">
                         <a href="#" class="linkC"><i class="bi bi-google"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
                         <a href="#" class="linkC">Download</a>
                         <a href="#" class="linkC">View Full Site</a>
-                        <a href="#" class="linkC">Mark as Read</a>
-                        <a href="#" class="linkC">View Post</a>
+                        <g:link controller="readingItem" action="remove" class="linkC" params="[postId: post.id]">Mark as Read</g:link>
+                        <g:link class="linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">
+                            View Post </g:link>
                     </div>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -403,7 +340,7 @@
                             <g:select class="form-select" aria-label="Select Topic" id="topic" from="${topicList}" name="topic">
 %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
 %{--                                <option value="1">One</option>--}%
-%{--                                <option value="2">Two</option>--}%
+%{--                                <option value="2">Two</option>--}
 %{--                                <option value="3">Three</option>--}%
                             </g:select>
                         </div>

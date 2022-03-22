@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-     ${session['username'].toString().capitalize()}'s Profile
+     ${usr.username.toString().capitalize()}'s Profile
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -20,7 +20,7 @@
 <body>
 <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
             LINK SHARING
         </a>
@@ -61,13 +61,12 @@
             <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="col-md-3">
-                        %{--                                Retrieve image if present --}%
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
                             <h5 class="card-title mb-0">${usr.firstName} ${usr.lastName}</h5>
-                            <p class="mb-4"> <small class="text-muted">@${usr.username}</small></p>
+                            <p class="mb-4"><small class="text-muted">${usr.username}</small></p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
@@ -88,10 +87,10 @@
                 <div class="row g-0">
                     <div class="card-header">
                         Topics
-                        <a href="${createLink(controller: 'topic', action: 'show')}" class="rightF linkC">View All</a>
                     </div>
                     <g:each var="topic" in="${topicList.take(5).sort{it.dateCreated}}">
-                        <g:if test="${topic.visibility == Visibility.Public}" >
+                        <g:if test="${topic.visibility == Visibility.Public || session['username'] == usr.username || session['role'] == 'Admin'}">
+                            <hr>
                             <div class="col">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-around">
@@ -113,7 +112,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
                         </g:if>
                     </g:each>
                 </div>
@@ -122,9 +120,9 @@
                 <div class="row g-0">
                     <div class="card-header">
                         Subscriptions
-                        <a href="${createLink(controller: 'topic', action: 'show')}" class="rightF linkC">View All</a>
                     </div>
                     <g:each var="subscription" in="${subscriptionList.take(5).sort{it.dateCreated}}">
+                        <hr>
                             <div class="col">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-around">
@@ -146,26 +144,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>
                     </g:each>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6">
             <div class="shadowC border-dark card text-dark bg-light" >
                 <div class="row g-0">
                     <div class="card-header">
                         Posts
                         <a href="" class="rightF linkC">View All</a>
                     </div>
-                    <g:each var="post" in="${resourceDataList.take(5).sort{it.dateCreated}}">
+                    <g:each var="post" in="${resourceDataList.take(20).sort{it.dateCreated}}">
+                        <hr>
                         <div class="col">
-                            <div class="card-body px-5 pb-3 pt-3">
-                                <h5 class="card-title mb-4 me-1"><a class="linkC" href="#">${post.topic.name.capitalize()}</a></h5>
-                                <p class="card-text">${post.description}</p>
+                            <div class="card-body px-4 m-2 pt-1 mt-0">
+                                <h6 class="card-text"><a class="linkC" href="#">${post.topic.name.capitalize()}</a></h6>
+                                <p class="card-text small">${post.description.capitalize()}</p>
                             </div>
                         </div>
-                        <div class="hstack card-footer d-flex justify-content-evenly">
+                        <div class="hstack card-footer d-flex justify-content-evenly small">
                             <a href="#" class="linkC"><i class="bi bi-google"></i></a>
                             <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
                             <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
@@ -174,7 +173,7 @@
                             <a href="#" class="linkC">Mark as Read</a>
                             <a href="#" class="linkC">View Post</a>
                         </div>
-                        <hr>
+
                     </g:each>
                 </div>
             </div>

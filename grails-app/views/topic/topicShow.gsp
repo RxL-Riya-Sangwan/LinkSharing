@@ -1,10 +1,11 @@
+<%@ page import="link_sharing.Topic; link_sharing.Subscription; link_sharing.Seriousness" %>
 <!Doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-    Dashboard
+        ${topic.name.toString().capitalize()}
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -19,7 +20,7 @@
 <body>
     <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
             LINK SHARING
         </a>
@@ -35,18 +36,26 @@
                     <a class="nav-link active" href="#"><i class="bi bi-link-45deg" title="Share Link" data-bs-toggle="modal" data-bs-target="#shareLink"></i></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Riya
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <g:if test="${session['username']}">
+                            ${session['username'].toString().capitalize()}
+                        </g:if>
+                        <g:else>
+                            User
+                        </g:else>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        %{--                                If user is admin show them following 3 items as well--}%
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Users</a></li>
-                        <li><a class="dropdown-item" href="#">Topics</a></li>
-                        <li><a class="dropdown-item" href="#">Posts</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="${createLink(controller: 'userData', action: 'profile')}">Profile</a></li>
+                    %{--                                If user is admin show them following 3 items as well--}%
+                        <g:if test="${session['role'] == 'admin'}">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Users</a></li>
+                            <li><a class="dropdown-item" href="#">Topics</a></li>
+                            <li><a class="dropdown-item" href="#">Posts</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        </g:if>
+
+                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -63,39 +72,34 @@
             <div class="border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
-                        Topic: "Grails"
+                       Topic: ${topic.name.capitalize()}
                     </div>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">Grails<small class="text-muted">(Private)</small> </h5>
+                            <h5 class="card-title">${topic.name.capitalize()} <small class="text-muted"> ${topic.visibility}</small> </h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@rcthomas</small>
+                                        <small class="text-muted">@${topic.createdBy.username}</small>
                                         <p><a class="linkC" href="#">Unsubscribe</a></p>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${usersList.size()}</small>
                                     </div>
                                     <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <p class="linkC">Posts</p>
+                                        <small>${resourceDataList.size()}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer hstack">
-                        <select class="form-select me-4" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
+                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness" />
                         <a class="nav-link bg-light text-dark me-4" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
                     </div>
                 </div>
@@ -103,32 +107,34 @@
             <div class="border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
-                        Users: "Grails"
+                        Users: ${topic.name.capitalize()}
                     </div>
+                    <g:each var="userData" in="${usersList.take(5)}">
+                        <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">Uday Pratap Singh</h5>
+                            <h5 class="card-title">${userData.firstName} ${userData.lastName}</h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@Uday</small>
+                                        <g:link class="linkC" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${userData.username}</small></g:link>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${Subscription.findAllByUserdata(userData).size()}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${Topic.findAllByCreatedBy(userData).size()}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    </g:each>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
@@ -162,10 +168,10 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-7">
-                                    Posts: "Grails"
+                                    Posts: ${topic.name.capitalize()}
                                 </div>
                                 <div class="col-5">
-                                    <select class="form-select rightF" aria-label="Search" id="topic">
+                                    <select class="form-select-sm rightF" aria-label="Search" id="topic">
                                         <option value="today" selected>Search</option>
                                         <option value="week">One Week</option>
                                         <option value="month">One Month</option>
@@ -175,15 +181,17 @@
                             </div>
                         </div>
                     </div>
+                <g:each var="post" in="${resourceDataList.take(5)}">
+                    <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            <h5 class="card-title mb-4 me-1 ">${post.getCreatedBy().firstName} ${post.getCreatedBy().lastName}
+                                <g:link class="linkC" controller="userData" action="profile" params="[username: post.getCreatedBy().username]"><small class="text-muted profile">@${post.getCreatedBy().username}</small></g:link>
+                               </h5>
+                            <p class="card-text">${post.description}</p>
                         </div>
                     </div>
                     <div class="hstack card-footer d-flex justify-content-evenly">
@@ -193,8 +201,10 @@
                         <a href="#" class="linkC">Download</a>
                         <a href="#" class="linkC">View Full Site</a>
                         <a href="#" class="linkC">Mark as Read</a>
-                        <a href="#" class="linkC">View Post</a>
+                        <g:link class=" linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">
+                            View Post </g:link>
                     </div>
+                </g:each>
                 </div>
             </div>
         </div>

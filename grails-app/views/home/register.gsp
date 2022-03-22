@@ -31,6 +31,11 @@
             ${flash.message}
         </div>
     </g:if>
+    <g:if test="${flash.warning}">
+        <div class="alert alert-danger text-center flash" role="alert" style="font-family: monospace">
+            ${flash.warning}
+        </div>
+    </g:if>
     <div class="container mt-2">
         <div class="row">
             <div class="col-3"></div>

@@ -36,7 +36,14 @@ class TopicController {
                     redirect(action: 'show')
                 }
                 else{
+
                     topic.save(flush:true, failOnError: true)
+
+                    Subscription newSub = new Subscription();
+                    topic.addToSubscription(newSub)
+                    usr.addToSubscription(newSub)
+                    newSub.seriousness = Seriousness.VerySerious;
+
                     flash.message = "${topic.name} Created!"
                     redirect(action: 'show')
                 }
@@ -46,13 +53,58 @@ class TopicController {
     }
 
     def show(){
+        UserData usr = UserData.findByUsername(session['username'])
+        List <Topic> topicList = Topic.findAll()
+        if (!topicList){
+            topicList = []
+        }
+        render(view: 'show', model: [topicList: topicList])
+    }
 
+    def topicShow(){
+
+        if (!session['username'])
+        {
+            redirect(controller: 'home', action: 'index')
+        }
+        else
+        {
+            Topic topic = Topic.findByName(params.topicName)
+
+            List <ResourceData> resourceDataList = ResourceData.findAllByTopic(topic)
+            List <UserData> usersList = Subscription.findAllByTopic(topic)
+
+            render(view: 'topicShow', model: [resourceDataList: resourceDataList, usersList: usersList, topic: topic])
+        }
+
+    }
+
+    def list(){
         UserData usr = UserData.findByUsername(session['username'])
         List <Topic> topicList = Topic.findAllByCreatedBy(usr)
         if (!topicList){
             topicList = []
         }
         render(view: 'show', model: [topicList: topicList])
+    }
+
+    def delete(){
+
+        UserData usr = UserData.findByUsername(session['username'])
+        Topic topic = Topic.get(params.id)
+
+        if (topic.createdBy == usr || usr.isAdmin)
+        {
+            if(topic.createdBy == usr){
+                usr.removeFromTopics(topic)
+
+            }
+        }
+
+        topic.delete(flush: true, failOnError: true)
+        flash.warning = "Topic is deleted"
+        redirect(controller: 'home', action: 'dashboard')
+
     }
 }
 

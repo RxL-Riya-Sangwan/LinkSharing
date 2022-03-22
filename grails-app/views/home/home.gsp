@@ -44,55 +44,50 @@
     </nav>
     <g:if test="${flash.message}">
         <div class="alert alert-success text-center flash" role="alert" style="font-family: monospace">
-            ${flash.message}
+        ${flash.message}
         </div>
     </g:if>
-    <div class="container mt-2">
+    <g:elseif test="${flash.warning}">
+        <div class="alert alert-danger text-center flash" role="alert" style="font-family: monospace">
+        ${flash.warning}
+        </div>
+    </g:elseif>
+        <div class="container mt-2">
             <div class="row">
-                <div class="col-sm-7">
-                    <div class="shadowC mb-3 border-dark card text-dark bg-light" >
+                <div class="col-sm-6">
+                    <div class="shadowC mb-4 border-dark card text-dark bg-light" >
                         <div class="row g-0">
                             <div class="card-header">
                                 Recent Shares
                             </div>
-                            <div class="col-md-3">
-                                <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                            </div>
-                            <div class="col-md-9">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            <g:each var="post" in="${recentShares}">
+                                <hr>
+                                <div class="col-md-3">
+                                    <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                                 </div>
-                            </div>
-                            <div class="hstack card-footer d-flex justify-content-evenly">
-                                <a href="#" class="linkC"><i class="bi bi-google"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                                <a href="#" class="linkC">View Full Post</a>
-                            </div>
-                            <hr>
-                            <div class="col-md-3">
-                                <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                            </div>
-                            <div class="col-md-9">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                <div class="col-md-9">
+                                    <div class="card-body">
+                                        <h6 class="card-title">${post.createdBy.firstName} ${post.createdBy.lastName}
+                                            <g:link class="linkC small homeLink" controller="userData" action="profile" params="[username: post.createdBy.username]">
+                                                <small class="text-muted profile">@${post.createdBy.username}</small>
+                                            </g:link>
+                                            <small class="text-muted small">${(new Date() - post.lastUpdated) * 24} hrs</small>
+                                           <g:link class="m-2 linkC rightF small px-2 homeLink" controller="topic" action="topicShow" params="[topicName: post.topic.name]">
+                                            ${post.topic.name}</g:link></h6>
+                                        <p class="card-text small pt-2">${post.description}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="hstack card-footer d-flex justify-content-evenly">
-                                <a href="#" class="linkC"><i class="bi bi-google"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                                <a href="#" class="linkC">View Full Post</a>
-                            </div>
+                                <div class="hstack small card-footer d-flex justify-content-evenly">
+                                    <a href="#" class="linkC"><i class="bi bi-google"></i></a>
+                                    <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
+                                    <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
+                                    <g:link class="homeLink linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">
+                                       View Full Post </g:link>
+                                </div>
+                            </g:each>
                         </div>
                     </div>
-                    <div class="shadowC mt-2 border-dark card text-dark bg-light" >
+                    <div class="shadowC border-dark card text-dark bg-light" >
                         <div class="row g-0">
                             <div class="card-header">
                                 <div class="container">
@@ -111,28 +106,36 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                            </div>
-                            <div class="col-md-9">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            <g:each var="post" in="${topPosts}">
+                                <hr>
+                                <div class="col-md-3">
+                                    <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                                 </div>
-                            </div>
-                            <div class="hstack card-footer d-flex justify-content-evenly">
-                                <a href="#" class="linkC"><i class="bi bi-google"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
-                                <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                                <a href="#" class="linkC">View Full Post</a>
-                            </div>
+                                <div class="col-md-9">
+                                    <div class="card-body">
+                                        <h6 class="card-title">${post.createdBy.firstName} ${post.createdBy.lastName}
+                                            <g:link class="linkC small" controller="userData" action="profile" params="[username: post.createdBy.username]">
+                                                <small class="text-muted profile">@${post.createdBy.username}</small>
+                                            </g:link>
+                                            <small class="text-muted small">${(new Date() - post.lastUpdated) * 24} hrs</small>
+                                            <g:link class="m-2 linkC rightF small px-2" controller="topic" action="topicShow" params="[topicName: post.topic.name]">
+                                                ${post.topic.name}</g:link></h6>
+                                        <p class="card-text small pt-2">${post.description}</p>
+                                    </div>
+                                </div>
+                                <div class="hstack small card-footer d-flex justify-content-evenly">
+                                    <a href="#" class="linkC"><i class="bi bi-google"></i></a>
+                                    <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
+                                    <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
+                                    <g:link class=" linkC" controller="ResourceData" action="showPost">
+                                        View Full Post </g:link>
+                                </div>
+                            </g:each>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-1"></div>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <div class="shadowC border border-dark card registerForm">
                         <div class="card-header">
                             Login

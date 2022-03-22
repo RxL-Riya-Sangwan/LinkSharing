@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-    Post
+        ${post.topic.toString().capitalize()}'s Post
+%{--        Post--}%
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -19,7 +20,7 @@
 <body>
 <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
             LINK SHARING
         </a>
@@ -35,18 +36,26 @@
                     <a class="nav-link active" href="#"><i class="bi bi-link-45deg" title="Share Link" data-bs-toggle="modal" data-bs-target="#shareLink"></i></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Riya
+                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <g:if test="${session['username']}">
+                            ${session['username'].toString().capitalize()}
+                        </g:if>
+                        <g:else>
+                            User
+                        </g:else>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        %{--                                If user is admin show them following 3 items as well--}%
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Users</a></li>
-                        <li><a class="dropdown-item" href="#">Topics</a></li>
-                        <li><a class="dropdown-item" href="#">Posts</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="${createLink(controller: 'userData', action: 'profile')}">Profile</a></li>
+                    %{--                                If user is admin show them following 3 items as well--}%
+                        <g:if test="${session['role'] == 'admin'}">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Users</a></li>
+                            <li><a class="dropdown-item" href="#">Topics</a></li>
+                            <li><a class="dropdown-item" href="#">Posts</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        </g:if>
+
+                        <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'logout')}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -57,6 +66,16 @@
         </div>
     </div>
 </nav>
+<g:if test="${flash.message}">
+    <div class="alert alert-success text-center flash" role="alert" style="font-family: monospace">
+        ${flash.message}
+    </div>
+</g:if>
+<g:elseif test="${flash.warning}">
+    <div class="alert alert-danger text-center flash" role="alert" style="font-family: monospace">
+        ${flash.warning}
+    </div>
+</g:elseif>
 <div class="container mt-2">
     <div class="row">
         <div class="col-sm-6">
@@ -67,24 +86,28 @@
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title mb-2 me-1">Uday Pratap Singh <small class="text-muted">@Uday 5min</small><a href="#" class="linkC rightF">Grails</a></h5>
-                            <small class="text-muted">2:45 PM 22 Feb 2022</small>
+                            <h5 class="card-title mb-2 me-1">${post.getCreatedBy().firstName} ${post.getCreatedBy().lastName} <small class="text-muted"> @${post.getCreatedBy().username} ${new Date() - post.lastUpdated}hrs</small><a href="#" class="linkC rightF">${post.topic.name.capitalize()}</a></h5>
+                            <small class="text-muted">
+                                <g:formatDate date="${post.getDateCreated()}" type="datetime" style="MEDIUM"/>
+                                </small>
                             <h5 class="card-title mb-2 d-flex justify-content-end">
-                                <i class="bi bi-heart-fill m-1"></i>
-                                <i class="bi bi-heart-fill m-1"></i>
-                                <i class="bi bi-heart-fill m-1"></i>
-                                <i class="bi bi-heart m-1"></i>
+                                <g:each var="count" in="${1..6}">
+                                    <i class="bi bi-heart m-1 rating"></i>
+                                </g:each>
                             </h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            <p class="card-text pt-2">${post.description}</p>
                         </div>
                     </div>
-                    <div class="hstack card-footer d-flex justify-content-evenly">
+                    <div class="hstack pt-2 card-footer d-flex justify-content-evenly">
                         <a href="#" class="linkC"><i class="bi bi-google"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                        <a href="#" class="linkC">View Full Post</a>
+                        <g:link class="linkC" controller="resourceData" action="delete" params="[postId: post.getId()]">
+                        Delete</g:link>
+%{--                        <g:if test="${post.get}"--}%
+                        <a href="#" class="linkC">Edit</a>
+                        <a href="#" class="linkC">Download</a>
+                        <a href="#" class="linkC">View Post</a>
                     </div>
                 </div>
             </div>
@@ -93,7 +116,7 @@
             <div class="border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
-                        Trending Topics
+                        Users Rated this Post
                     </div>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
@@ -185,36 +208,36 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <g:form controller="resourceData" action="createDocument" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <label for="doc" class="col-sm-2 col-form-label">Document</label>
                         <div class="col-sm-10">
-                            %{--                                Make file browse functionality: enctype="multipart/form-data"--}%
-                            <input type="file" class="form-control" id="doc" required>
+                            %{--                            accept="application/pdf"--}%
+                            <input type="file" class="custom-file-input form-control" id="doc" name="file" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="des" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="des" rows="3" required></textarea>
+                            <textarea class="form-control" id="des" rows="3" required name="description"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <select class="form-select" aria-label="Select Topic" id="topic">
-                                <option selected disabled hidden>Select topic for this resource</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <g:select class="form-select"  id="topic" name="topic" from="${subList.topic.name}">
+                            %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+                            %{--                                <option value="1">One</option>--}%
+                            %{--                                <option value="2">Two</option>--}%
+                            %{--                                <option value="3">Three</option>--}%
+                            </g:select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-outline-primary">Share</button>
+                        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Share</button>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>
@@ -262,35 +285,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <g:form controller="resourceData" action="createLink">
                     <div class="row mb-3">
                         <label for="linkUrl" class="col-sm-2 col-form-label">Link</label>
                         <div class="col-sm-10">
-                            <input type="url" class="form-control" id="linkUrl" required>
+                            <input type="url" class="form-control" id="linkUrl" name="url" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="des" class="col-sm-2 col-form-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" id="des" rows="3" required></textarea>
+                            <textarea class="form-control" id="des" rows="3" name="description" required></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <select class="form-select" aria-label="Select Topic" id="topic">
-                                <option selected disabled hidden>Select topic for this resource</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+                            <g:select class="form-select" aria-label="Select Topic" id="topic" from="${subList.topic.name}" name="topic">
+                            %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+                            %{--                                <option value="1">One</option>--}%
+                            %{--                                <option value="2">Two</option>--}%
+                            %{--                                <option value="3">Three</option>--}%
+                            </g:select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-outline-primary">Share</button>
+                        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Share</button>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>
@@ -328,7 +351,7 @@
             </div>
         </div>
     </div>
-</div>
+</>
 
 </body>
 </html>

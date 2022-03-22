@@ -77,17 +77,19 @@
                     <tr>
                         <th scope="col"></th>
                         <th scope="col">TOPIC NAME</th>
-                        <th scope="col">VISIBILITY</th>
+                        <th scope="col">CREATED BY</th>
                     </tr>
                     </thead>
                     <tbody>
                     <g:set var="counter" value="${1}"/>
-                    <g:each in="${topicList}">
-                        <tr>
-                            <th scope="row">${counter}</th>
-                            <td>${it.name.capitalize()}</td>
-                            <td>${it.visibility}</td>
-                        </tr>
+                    <g:each in="${topicList.sort{it.name}}">
+                        <g:if test="${(it.createdBy == session['username'] || session['role'] == 'Admin') || it.visibility.Public}">
+                            <tr>
+                                <th scope="row">${counter}</th>
+                                <td>${it.name.capitalize()}</td>
+                                <td>${it.createdBy.firstName} ${it.createdBy.lastName}</td>
+                            </tr>
+                        </g:if>
                         <g:set var="counter" value="${counter + 1}" />
                     </g:each>
                     </tbody>

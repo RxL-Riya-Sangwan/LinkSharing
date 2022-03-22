@@ -24,25 +24,32 @@ function flashFade(){
     $(".flash").fadeOut('normal', 'swing');
 }
 
+
 $(document).ready(function (){
-        setTimeout(flashFade, 3000);
+        setTimeout(flashFade, 1500);
 });
 
 
-$('.profile').click(function (){
-    let username = this.textContent.slice(1,);
-    let data = {};
-    let url = '<g:link controller="userData" action="profile" />';
-    data.username = username;
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: data,
-        success: function (result){
-            alert('ok');
-        },
-        error: function (result){
-            alert('not okay');
-        }
-    });
+// $('.profile').click(function (){
+//     let username = this.textContent.slice(1,);
+//     let data = {};
+//     let url = '<g:createLink controller="userData" action="profile" />';
+//     data.username = username;
+//     $.ajax({
+//         type: "GET",
+//         url: url,
+//         data: data,
+//         success: function (result){
+//             alert('ok');
+//         },
+//         error: function (result){
+//             alert('not okay');
+//         }
+//     });
+// });
+
+
+$(".homeLink").click(function(){
+    alert("You are not logged In");
 });
+
