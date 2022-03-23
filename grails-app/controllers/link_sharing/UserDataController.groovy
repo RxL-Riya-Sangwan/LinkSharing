@@ -111,4 +111,25 @@ class UserDataController {
         }
 
     }
+
+    def updateStatus(){
+        UserData usr = UserData.findById(params.userId);
+
+        if(!usr.isAdmin){
+            if (usr.isActive){
+                usr.isActive = false
+            }
+            else{
+                usr.isActive = true
+            }
+        }
+        else{
+            flash.message = "You can't deactivate admin user"
+            redirect(controller: 'home', action: 'index')
+        }
+
+        println 'updating active status'
+        usr.save(failOnError: true, flush: true)
+
+    }
 }

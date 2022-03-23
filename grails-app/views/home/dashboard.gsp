@@ -60,10 +60,10 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="SEARCH" aria-label="Search">
+            <g:form class="d-flex" controller="home" action="search">
+                <input class="form-control me-2" type="search" placeholder="SEARCH" aria-label="Search" id="search" name="search">
                 <button class="btn btn-outline-dark" type="submit">SEARCH</button>
-            </form>
+            </g:form>
         </div>
     </div>
 </nav>

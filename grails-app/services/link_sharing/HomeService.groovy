@@ -48,6 +48,11 @@ class HomeService {
                 res.code = 1
                 return res
             }
+            else if (!user1.isActive){
+                res.value = "You are deactivated by Admin"
+                res.code = 1
+                return res
+            }
             else
             {
                 UserData newUser = new UserData(params)

@@ -198,4 +198,47 @@ class HomeController {
 
     }
 
+
+    def search(){
+
+        println 'in search'
+
+        UserData newUser = UserData.findByUsername(session['username'])
+
+        // trending topics
+        def trending = ResourceData.createCriteria().list() {
+            projections {
+                groupProperty('topic')
+                count('id', 'topicCount')
+            }
+            order('topicCount', 'desc')
+        }
+
+        List <Topic> trendingList = []
+
+        for(def li in trending)
+        {
+            String name = li.getAt(0)
+            Topic topic = Topic.findByName(name)
+            trendingList.add(topic)
+        }
+
+
+        // top posts
+        List <ResourceData> topPosts = ResourceData.createCriteria().list (max: 5){
+            'topic'{
+                eq('visibility', Visibility.Public)
+            }
+            order('resourcerating', 'desc')
+        }
+
+        // searched term related posts
+        String name = params.search
+
+
+        render(view: 'search', model: ['topPosts': topPosts, 'trendingList': trendingList, 'newUser': newUser])
+
+
+    }
+
 }

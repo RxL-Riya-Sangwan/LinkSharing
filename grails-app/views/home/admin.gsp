@@ -94,8 +94,8 @@
                         <td>${it.email}</td>
                         <td>${it.firstName}</td>
                         <td>${it.lastName}</td>
-                        <td>${it.isActive}</td>
-                        <td></td>
+                        <td class="activeStatus" data-userId="${it.id}">${it.isActive.toString().capitalize()}</td>
+                        <td class="updateStatus" style="cursor: pointer;" data-userId="${it.id}">Deactivate</td>
                     </tr>
                     <g:set var="counter" value="${counter + 1}" />
                 </g:each>
@@ -112,6 +112,11 @@
         $(document).ready( function () {
             $('#table_id').DataTable();
         } );
+
+        let url = '<g:createLink controller="userData" action="updateStatus" />'
+        let data = {};
     </script>
+    <asset:javascript src="app.js" />
+
 </body>
 </html>

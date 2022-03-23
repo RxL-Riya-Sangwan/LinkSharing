@@ -64,5 +64,37 @@ function rating(count, username, postId){
 }
 
 
+// For updating the status of user
+
+$(".updateStatus").click(function(){
+
+    data.userId = $(this).attr("data-userId");
+    console.log($(this).attr("data-userId"));
+
+    if ($(this).text() === "Deactivate"){
+        $(this).text('Activate');
+        let id = data.userId;
+        $(".activeStatus[data-userId='${id}']").text('False')
+    }
+    else{
+        $(this).text('Deactivate');
+        $(".activeStatus").text('True')
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: data,
+        success: function (){
+            console.log('success')
+        },
+        failure: function (){
+            console.log('failure')
+        }
+    })
+
+});
+
+
 
 
