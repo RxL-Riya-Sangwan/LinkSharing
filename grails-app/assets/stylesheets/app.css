@@ -40,3 +40,17 @@ nav .navbar-brand
     text-decoration: none;
 }
 
+#table_id_length, #table_id_filter{
+    margin-bottom: 2em;
+}
+
+#table_id_paginate{
+    position: fixed;
+    left: 0;
+    bottom: 2px;
+    width: 100%;
+}
+
+#table_id_info{
+    display: none;
+}

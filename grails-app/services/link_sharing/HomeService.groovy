@@ -42,6 +42,12 @@ class HomeService {
                 res.code = 1
                 return res
             }
+            else if (params.password.length() < 8){
+
+                res.value = 'Password should be of size >= 8'
+                res.code = 1
+                return res
+            }
             else
             {
                 UserData newUser = new UserData(params)

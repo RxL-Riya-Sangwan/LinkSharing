@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-    Reading List
+        Admin
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <style>
     html, body{
         background-color: aliceblue;
@@ -62,34 +63,40 @@
         </div>
     </div>
 </nav>
-<g:if test="${flash.message}">
-    <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
-        ${flash.message}
-    </div>
-</g:if>
-<div class="container">
+    <g:if test="${flash.message}">
+        <div class="alert alert-success text-center" role="alert" style="font-family: monospace">
+            ${flash.message}
+        </div>
+    </g:if>
+    <div class="container">
     <div class="row">
         <div class="col-1">
         </div>
         <div class="col-10">
-            <table class="shadowC border-dark table table-hover table-striped table-bordered table-responsive">
+            <table class="shadowC border-dark table table-hover table-striped table-bordered table-responsive" id="table_id">
                 <thead style="background-color: #191c1f; color: white">
                 <tr>
-                    <th scope="col"></th>
-                    <th scope="col">TOPIC NAME</th>
-                    <th scope="col">POST DESCRIPTION</th>
-                    <th scope="col">CREATED BY</th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email Id</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Manage</th>
                 </tr>
                 </thead>
                 <tbody>
                 <g:set var="counter" value="${1}"/>
-                <g:each in="${readingList.sort{it.dateCreated}}">
-                        <tr>
-                            <th scope="row">${counter}</th>
-                            <td>${it.topic.name.capitalize()}</td>
-                            <td>${it.description}</td>
-                            <td>${it.createdBy.firstName} ${it.createdBy.lastName}</td>
-                        </tr>
+                <g:each in="${userList}">
+                    <tr>
+                        <td>${counter}</td>
+                        <td>${it.username}</td>
+                        <td>${it.email}</td>
+                        <td>${it.firstName}</td>
+                        <td>${it.lastName}</td>
+                        <td>${it.isActive}</td>
+                        <td></td>
+                    </tr>
                     <g:set var="counter" value="${counter + 1}" />
                 </g:each>
                 </tbody>
@@ -99,5 +106,12 @@
         </div>
     </div>
 </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable();
+        } );
+    </script>
 </body>
 </html>

@@ -10,16 +10,16 @@ class HomeController {
 
     def homeService
 
-    def beforeInterceptor = [action: this.&auth(), except: ['login', 'register']]
-
-    private auth(){
-        if(!session['username']){
-            println 'In Auth'
-            redirect(controller: 'home', action: 'login')
-            return false
-        }
-
-    }
+//    def beforeInterceptor = [action: this.&auth(), except: ['login', 'register']]
+//
+//    private auth(){
+//        if(!session['username']){
+//            println 'In Auth'
+//            redirect(controller: 'home', action: 'login')
+//            return false
+//        }
+//
+//    }
 
     def index(){
 
@@ -31,6 +31,8 @@ class HomeController {
          {
              UserData usr = UserData.findByUsername(session['username'])
              List <Topic> alltopicList = Topic.findAll()
+             Integer countTopic = Topic.countByCreatedBy(usr)
+             Integer countSub = Subscription.countByUserdata(usr)
              List <Subscription> subList = Subscription.findAllByUserdata(usr)
              def trending = ResourceData.createCriteria().list() {
                     projections {
@@ -68,9 +70,7 @@ class HomeController {
                  }
              }
 
-             println readingList
-
-             render(view: 'dashboard', model: [newUser: usr, topicList: alltopicList, subList: subList,trendingList: trendingList, readingList: readingList])
+             render(view: 'dashboard', model: [newUser: usr, topicList: alltopicList, subList: subList,trendingList: trendingList, readingList: readingList, countTopic: countTopic, countSub: countSub])
          }
     }
 
@@ -181,6 +181,21 @@ class HomeController {
     def apology()
     {
         render(view: 'apology')
+    }
+
+    def admin()
+    {
+        UserData currentUser = UserData.findByUsername(session['username'])
+        if (!currentUser.isAdmin){
+            flash.message = "You cannot access to this page!"
+            redirect(controller: 'home', action: 'index')
+        }
+        else
+        {
+            List <UserData> userList = UserData.findAll()
+            render(view: 'admin', model: [userList: userList])
+        }
+
     }
 
 }

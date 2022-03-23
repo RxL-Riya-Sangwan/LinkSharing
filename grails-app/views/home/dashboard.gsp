@@ -46,13 +46,13 @@
                         ${session['username'].toString().capitalize()}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="${createLink(controller: 'userData', action: 'profile')}">Profile</a></li>
+                        <li><a class="dropdown-item" href="${createLink(controller: 'userData', action: 'edit')}">Profile</a></li>
                         %{--                                If user is admin show them following 3 items as well--}%
                         <g:if test="${session['role'] == 'admin'}">
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Users</a></li>
-                            <li><a class="dropdown-item" href="#">Topics</a></li>
-                            <li><a class="dropdown-item" href="#">Posts</a></li>
+                            <li><a class="dropdown-item" href="${createLink(controller: 'home', action: 'admin')}">Users</a></li>
+                            <li><a class="dropdown-item" href="${createLink(controller: 'topic', action: 'show')}">Topics</a></li>
+                            <li><a class="dropdown-item" href="${createLink(controller: 'resourceData', action: 'show')}">Posts</a></li>
                             <li><hr class="dropdown-divider"></li>
                         </g:if>
 
@@ -97,14 +97,14 @@
                                         <p>
                                         <g:link class="linkC" controller="subscription" action="show">Subscriptions</g:link>
                                         </p>
-                                        <small>${subList.size()}</small>
+                                        <small>${countSub}</small>
                                     </div>
                                     <div class="col">
                                         <p>
                                             <g:link class="linkC" controller="topic" action="list">Topics</g:link>
                                         </p>
-                                        <g:if test="${topicList}">
-                                            <small>${topicList.size()}</small>
+                                        <g:if test="${countTopic}">
+                                            <small>${countTopic}</small>
                                         </g:if>
                                         <g:else>
                                             <small>0</small>
@@ -137,7 +137,7 @@
                                     <div class="row">
                                         <div class="col">
                                             <p class="mb-4">
-                                                <g:link class="topicLink" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${newUser.username}</small></g:link>
+                                                <g:link class="topicLink" controller="userData" action="profile" params="[username: topic.createdBy.username]"><small class="text-muted profile">@${topic.createdBy.username}</small></g:link>
                                             </p>
                                             <p>
                                                 <g:if test="${Subscription.findByTopicAndUserdata(topic, newUser)}">
@@ -154,11 +154,11 @@
                                         </div>
                                         <div class="col">
                                             <p class="linkC">Subscriptions</p>
-                                            <small>${Subscription.findAllByTopic(topic).size()}</small>
+                                            <small>${Subscription.countByTopic(topic)}</small>
                                         </div>
                                         <div class="col">
                                             <p class="linkC">Posts</p>
-                                                <small>${ResourceData.findAllByTopic(topic).size()}</small>
+                                                <small>${ResourceData.countByTopic(topic)}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -192,27 +192,27 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-%{--                                        <g:link class="linkC" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${newUser.username}</small></g:link>--}%
-%{--                                        <p>--}%
-%{--                                            <g:if test="${Subscription.findByTopicAndUserdata(topic, newUser)}">--}%
-%{--                                                <g:link class="linkC" controller="Subscription" action="unsubscribe" params="[topic: topic.name, username: newUser.username]">--}%
-%{--                                                    Unsubscribe--}%
-%{--                                                </g:link>--}%
-%{--                                            </g:if>--}%
-%{--                                            <g:else>--}%
-%{--                                                <g:link class="linkC" controller="Subscription" action="subscribe" params="[topic: topic.name, username: newUser.username]">--}%
-%{--                                                    Subscribe--}%
-%{--                                                </g:link>--}%
-%{--                                            </g:else>--}%
-%{--                                        </p>--}%
+                                        <g:link class="linkC" controller="userData" action="profile" params="[username: sub.topic.createdBy.username]"><small class="text-muted profile">@${sub.topic.createdBy.username}</small></g:link>
+                                        <p>
+                                            <g:if test="${Subscription.findByTopicAndUserdata(sub.topic, newUser)}">
+                                                <g:link class="linkC" controller="Subscription" action="unsubscribe" params="[topic: sub.topic.name, username: newUser.username]">
+                                                    Unsubscribe
+                                                </g:link>
+                                            </g:if>
+                                            <g:else>
+                                                <g:link class="linkC" controller="Subscription" action="subscribe" params="[topic: sub.topic.name, username: newUser.username]">
+                                                    Subscribe
+                                                </g:link>
+                                            </g:else>
+                                        </p>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>${Subscription.findAllByTopic(sub.getTopic()).size()}</small>
+                                        <small>${Subscription.countByTopic(sub.getTopic())}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Posts</p>
-                                        <small>${ResourceData.findAllByTopic(sub.getTopic()).size()}</small>
+                                        <small>${ResourceData.countByTopic(sub.getTopic())}</small>
                                     </div>
                                 </div>
                             </div>

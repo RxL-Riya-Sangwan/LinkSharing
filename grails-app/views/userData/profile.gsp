@@ -103,11 +103,11 @@
                                         </div>
                                         <div>
                                             <p class="linkC">Subscriptions</p>
-                                            <small>${Subscription.findAllByTopic(topic).size()}</small>
+                                            <small>${Subscription.countByTopic(topic)}</small>
                                         </div>
                                         <div>
                                             <p class="linkC">Posts</p>
-                                            <small>${ResourceData.findAllByTopic(topic).size()}</small>
+                                            <small>${ResourceData.countByTopic(topic)}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -135,11 +135,11 @@
                                         </div>
                                         <div>
                                             <p class="linkC">Subscriptions</p>
-                                            <small>${Subscription.findAllByTopic(subscription.topic).size()}</small>
+                                            <small>${Subscription.countByTopic(subscription.topic)}</small>
                                         </div>
                                         <div>
                                             <p class="linkC">Posts</p>
-                                            <small>${ResourceData.findAllByTopic(subscription.topic).size()}</small>
+                                            <small>${ResourceData.countByTopic(subscription.topic)}</small>
                                         </div>
                                     </div>
                                 </div>

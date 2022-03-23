@@ -1,10 +1,11 @@
+<%@ page import="link_sharing.Topic; link_sharing.Seriousness; link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Visibility" %>
 <!Doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>
-    User Profile
+    Edit Profile
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -19,7 +20,7 @@
 <body>
 <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="${createLink(controller: 'home', action: 'index')}">
             <i class="bi bi-ui-radios"></i>
             LINK SHARING
         </a>
@@ -29,18 +30,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Riya
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ${session['username'].toString().capitalize()}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        %{--                                If user is admin show them following 3 items as well--}%
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Users</a></li>
-                        <li><a class="dropdown-item" href="#">Topics</a></li>
-                        <li><a class="dropdown-item" href="#">Posts</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    %{--                                If user is admin show them following 3 items as well--}%
+                        <g:if test="${session['role'] == 'admin'}">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Users</a></li>
+                            <li><a class="dropdown-item" href="#">Topics</a></li>
+                            <li><a class="dropdown-item" href="#">Posts</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        </g:if>
+                        <li><a class="dropdown-item" href=${createLink(controller: 'home', action: 'logout')}>Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -54,24 +57,24 @@
 <div class="container mt-2">
     <div class="row">
         <div class="col-sm-5">
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title mb-0">Uday Pratap Singh</h5>
-                            <p class="mb-4"> <small class="text-muted">@Uday</small></p>
+                            <h5 class="card-title mb-0">${usr.firstName} ${usr.lastName}</h5>
+                            <p class="mb-4"><small class="text-muted">${usr.username}</small></p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${Subscription.countByUserdata(usr)}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>5</small>
+                                        <small>${Topic.countByCreatedBy(usr)}</small>
                                     </div>
                                 </div>
                             </div>
@@ -79,16 +82,16 @@
                     </div>
                 </div>
             </div>
-            <div class="border-dark card text-dark bg-light mb-3">
+            <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
                         <div class="container">
                             <div class="row">
                                 <div class="col-7">
-                                    Posts
+                                    Topics
                                 </div>
                                 <div class="col-5">
-                                    <select class="form-select rightF" aria-label="Search" id="topic">
+                                    <select class="form-select-sm rightF" aria-label="Search" id="topic">
                                         <option value="today" selected>Search</option>
                                         <option value="week">One Week</option>
                                         <option value="month">One Month</option>
@@ -98,216 +101,98 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
+                    <g:each var="topic" in="${topicList.take(5)}">
+                        <hr>
+                        <div class="col-md-3">
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <g:link class="topicLink" controller="topic" action="topicShow" params="[topicName: topic.name]">
+                                        ${topic.name}</g:link>
+                                </h5>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="mb-4">
+                                                <g:link class="topicLink" controller="userData" action="profile" params="[username: topic.createdBy.username]"><small class="text-muted profile">@${topic.createdBy.username}</small></g:link>
+                                            </p>
+                                            <p>
+                                                Subscribe
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="linkC">Subscriptions</p>
+                                            <small>${Subscription.countByTopic(topic)}</small>
+                                        </div>
+                                        <div class="col">
+                                            <p class="linkC">Posts</p>
+                                            <small>${ResourceData.countByTopic(topic)}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                    </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="card-footer hstack">
+                            <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness" />
+                            <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility"/>
+
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                         </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
-                    </select>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                </div>
-            </div>
-            <div class="border-dark card text-dark bg-light mb-3">
-                <div class="row g-0">
-                    <div class="card-header">
-                        Subscriptions
-                        <a href="" class="rightF linkC">View All</a>
-                    </div>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                    </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
-                    </select>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                    <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
+                    </g:each>
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
-            <div class="border-dark card text-dark bg-light" >
-                <div class="row g-0">
-                    <div class="card-header">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-7">
-                                    Posts
-                                </div>
-                                <div class="col-5">
-                                    <select class="form-select rightF" aria-label="Search" id="topic">
-                                        <option value="today" selected>Search</option>
-                                        <option value="week">One Week</option>
-                                        <option value="month">One Month</option>
-                                        <option value="year">One year</option>
-                                    </select>
-                                </div>
-                            </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6">
+            <div class="shadowC border border-dark card">
+                <div class="card-header">
+                    Profile
+                </div>
+                <div class="card-body">
+                    <g:form class="m-2 p-3" url="[controller: 'userData', action: 'updateProfile']" method="post">
+                        <div class="mb-2">
+                            <label for="firstName">First Name</label>
+                            <g:textField autocomplete="off" class="form-control" name="firstName" id="firstName" required="true" value="${usr.firstName}"/>
                         </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="#" class="linkC">Grails</a> </h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                        <div class="mb-2">
+                            <label for="lastName">Last Name</label>
+                            <g:textField autocomplete="off" class="form-control" name="lastName" id="lastName" required="true" value="${usr.lastName}"/>
                         </div>
-                    </div>
-                    <div class="hstack card-footer d-flex justify-content-evenly">
-                        <a href="#" class="linkC"><i class="bi bi-google"></i></a>
-                        <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                        <a href="#" class="linkC">Download</a>
-                        <a href="#" class="linkC">View Full Site</a>
-                        <a href="#" class="linkC">Mark as Read</a>
-                        <a href="#" class="linkC">View Post</a>
-                    </div>
+                        <div class="mb-2">
+                            <label for="userName">Username</label>
+                            <g:textField autocomplete="off" class="form-control" name="username" id="username" required="true" value="${usr.username}"/>
+                        </div>
+                        <div class="mb-2">
+                            <label for="Picture">Picture<small class="text-muted">(Size < 25MB)</small> </label><br>
+                            <input type="file" class="form-control-file" id="Picture" name="photo" accept="image/jpg, image/png, image/*" value="${usr.photo}">
+                        </div>
+                        <button class="btn btn-outline-dark" type="submit" name="Update" id="submitButton">Update</button>
+                    </g:form>
+                </div>
+            </div>
+            <div class="shadowC border border-dark card mt-4">
+                <div class="card-header">
+                    Change Password
+                </div>
+                <div class="card-body">
+                    <g:form url="[controller: 'userData', action: 'updatePassword']" method="post">
+                        <div class="mb-3">
+                            <label for="Password">Password</label>
+                            <g:passwordField placeholder="Must be of 8 to 20 characters" class="form-control" name="password" id="password" required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password">Confirm Password</label>
+                            <g:passwordField placeholder="Must be of 8 to 20 characters" class="form-control" name="confirmPassword" id="confirmPassword" required="true"/>
+                        </div>
+                        <div class="mb-2">
+                            <p id="msg"></p>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark">Update</button>
+                    </g:form>
                 </div>
             </div>
         </div>
@@ -467,6 +352,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<asset:javascript src="app.js" />
 </body>
 </html>

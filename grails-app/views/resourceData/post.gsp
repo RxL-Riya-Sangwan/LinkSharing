@@ -87,12 +87,12 @@
                     <div class="col-md-9">
                         <div class="card-body">
                             <h5 class="card-title mb-2 me-1">${post.getCreatedBy().firstName} ${post.getCreatedBy().lastName} <small class="text-muted"> @${post.getCreatedBy().username} ${new Date() - post.lastUpdated}hrs</small><a href="#" class="linkC rightF">${post.topic.name.capitalize()}</a></h5>
-                            <small class="text-muted">
+                            <small class="text-muted small">
                                 <g:formatDate date="${post.getDateCreated()}" type="datetime" style="MEDIUM"/>
                                 </small>
-                            <h5 class="card-title mb-2 d-flex justify-content-end">
-                                <g:each var="count" in="${1..6}">
-                                    <i class="bi bi-heart m-1 rating"></i>
+                            <h5 class="card-title mb-2 d-flex justify-content-end m-2">
+                                <g:each var="count" in="${1..5}">
+                                    <i class="bi bi-heart m-1 rating" data-count="${count}" onclick="rating(${count}, '${session["username"]}', ${post.id})"></i>
                                 </g:each>
                             </h5>
                             <p class="card-text pt-2">${post.description}</p>
@@ -351,7 +351,12 @@
             </div>
         </div>
     </div>
-</>
-
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    let url = '<g:createLink controller="resourceRating" action="rate" />'
+    let data = {};
+</script>
+<asset:javascript src="app.js" />
 </body>
 </html>

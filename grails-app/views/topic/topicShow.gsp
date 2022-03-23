@@ -109,55 +109,32 @@
                     <div class="card-header">
                         Users: ${topic.name.capitalize()}
                     </div>
-                    <g:each var="userData" in="${usersList.take(5)}">
+                    <g:each var="sub" in="${usersList.take(5)}">
                         <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">${userData.firstName} ${userData.lastName}</h5>
+                            <h5 class="card-title">${sub.userdata.firstName} ${sub.userdata.lastName}</h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <g:link class="linkC" controller="userData" action="profile" params="[username: newUser.username]"><small class="text-muted profile">@${userData.username}</small></g:link>
+                                        <g:link class="linkC" controller="userData" action="profile" params="[username: sub.userdata.username]"><small class="text-muted profile">@${sub.userdata.username}</small></g:link>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>${Subscription.findAllByUserdata(userData).size()}</small>
+                                        <small>${Subscription.countByUserdata(sub.userdata)}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Topics</p>
-                                        <small>${Topic.findAllByCreatedBy(userData).size()}</small>
+                                        <small>${Topic.countByCreatedBy(sub.userdata)}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     </g:each>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Uday Pratap Singh</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Topics</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

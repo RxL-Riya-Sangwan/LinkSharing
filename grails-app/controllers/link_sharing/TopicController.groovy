@@ -20,7 +20,6 @@ class TopicController {
 
             }else{
                 println 'creating topic'
-
                 Topic topic = new Topic(params);
                 usr.addToTopics(topic)
 
@@ -38,7 +37,7 @@ class TopicController {
                 else{
 
                     topic.save(flush:true, failOnError: true)
-
+                    usr.addToTopics(topic)
                     Subscription newSub = new Subscription();
                     topic.addToSubscription(newSub)
                     usr.addToSubscription(newSub)
@@ -53,6 +52,7 @@ class TopicController {
     }
 
     def show(){
+
         UserData usr = UserData.findByUsername(session['username'])
         List <Topic> topicList = Topic.findAll()
         if (!topicList){
@@ -72,9 +72,9 @@ class TopicController {
             Topic topic = Topic.findByName(params.topicName)
 
             List <ResourceData> resourceDataList = ResourceData.findAllByTopic(topic)
-            List <UserData> usersList = Subscription.findAllByTopic(topic)
+            List <Subscription> subList = Subscription.findAllByTopic(topic)
 
-            render(view: 'topicShow', model: [resourceDataList: resourceDataList, usersList: usersList, topic: topic])
+            render(view: 'topicShow', model: [resourceDataList: resourceDataList, usersList: subList, topic: topic])
         }
 
     }
