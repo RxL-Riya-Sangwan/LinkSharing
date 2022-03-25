@@ -44,7 +44,7 @@
                     Forgot Password
                 </div>
                 <div class="card-body">
-                    <g:form url="[controller: 'home', action: 'forgot']" method="post">
+                    <g:form controller="home" action="forgotPassword" method="post">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">

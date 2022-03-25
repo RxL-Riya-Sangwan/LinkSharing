@@ -1,4 +1,4 @@
-<%@ page import="link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Seriousness; link_sharing.Visibility" %>
+<%@ page import="link_sharing.DocumentResource; link_sharing.LinkResource; link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Seriousness; link_sharing.Visibility" %>
 <!Doctype html>
 <html>
 <head>
@@ -83,7 +83,12 @@
             <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
+                        <g:if test="${newUser.photo}">
+                            <g:img dir="images" file="${newUser.photo}" class="img-fluid rounded-start" alt="User Image"/>
+                        </g:if>
+                        <g:else>
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
+                        </g:else>
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
@@ -129,7 +134,7 @@
                         </div>
                         <div class="col-md-9">
                             <div class="card-body">
-                                <h5 class="card-title">
+                                <h5 class="card-title topicName" data-topicId="${topic.id}">
                                     <g:link class="topicLink" controller="topic" action="topicShow" params="[topicName: topic.name]">
                                         ${topic.name}</g:link>
                                 </h5>
@@ -165,12 +170,13 @@
                             </div>
                         </div>
                         <div class="card-footer hstack">
-                            <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness" />
-                            <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility"/>
-
+                            <g:select class="form-select m-1 seriousness" aria-label="Select Seriousness" from="${Seriousness}" name="seriousness" data-topicId="${topic.id}" noSelection="['': Subscription.findByTopicAndUserdata(topic, new)]"/>
+                            <g:if test="${newUser.isAdmin || newUser == topic.createdBy}">
+                                <g:select class="form-select m-1 visibility" aria-label="Select Topic"  from="${Visibility}" name="visibility" data-topicId="${topic.id}"/>
+                                <a href="#" class="nav-link bg-light text-dark editTopic" data-topicId="${topic.id}"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
+                                <g:link class="nav-link bg-light text-dark" controller="topic" action="delete" params="[topicId: topic.id]"><i class="bi bi-trash-fill" title="Delete Topic"></i></g:link>
+                            </g:if>
                             <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
                         </div>
                     </g:each>
                 </div>
@@ -188,7 +194,7 @@
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">${sub.topic.name.capitalize()}</h5>
+                            <h5 class="card-title topicName" data-topicId="${sub.topic.id}">${sub.topic.name.capitalize()}</h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
@@ -218,22 +224,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer hstack">
-                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" name="seriousness" from="${Seriousness}">
-%{--                            <option selected disabled hidden>Seriousness</option>--}%
-%{--                            <option value="Very Serious">Very Serious</option>--}%
-%{--                            <option value="Serious">Serious</option>--}%
-%{--                            <option value="Casual">Casual</option>--}%
-                        </g:select>
-                        <g:select class="form-select m-1" aria-label="Select Topic" id="visiblity" name="visibility" from="${Visibility}">
-%{--                            <option selected disabled hidden>Visibility</option>--}%
-%{--                            <option value="Private">Private</option>--}%
-%{--                            <option value="Public">Public</option>--}%
-                        </g:select>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-pencil-square" title="Edit Topic"></i></a>
-                        <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-trash-fill" title="Unsubscribe"></i></a>
-                    </div>
+                        <div class="card-footer hstack">
+                            <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness" />
+                            <g:if test="${newUser.isAdmin || newUser == sub.topic.createdBy}">
+                                <g:select class="form-select m-1" aria-label="Select Topic" id="visibility" from="${Visibility}" name="visibility"/>
+                                <g:link class="nav-link bg-light text-dark editTopic" data-topicId="${sub.topic.id}"><i class="bi bi-pencil-square" title="Edit Topic"></i></g:link>
+                                <g:link class="nav-link bg-light text-dark" controller="topic" action="delete" params="[topicId: sub.topic.id]"><i class="bi bi-trash-fill" title="Delete Topic"></i></g:link>
+                            </g:if>
+                            <a class="nav-link bg-light text-dark" href="#"><i class="bi bi-envelope-dash-fill" title="Send Invitation" data-bs-toggle="modal" data-bs-target="#sendInvitation"></i></a>
+                        </div>
                     </g:each>
                 </div>
             </div>
@@ -263,9 +262,13 @@
                         <a href="#" class="linkC"><i class="bi bi-google"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
-                        <a href="#" class="linkC">Download</a>
-                        <a href="#" class="linkC">View Full Site</a>
-                        <g:link controller="readingItem" action="remove" class="linkC" params="[postId: post.id]">Mark as Read</g:link>
+                        <g:if test="${LinkResource.get(post.id)}">
+                            <a href="${LinkResource.get(post.id).url}" target="_blank" class="linkC">View Full Post</a>
+                        </g:if>
+                        <g:elseif test="${DocumentResource.get(post.id)}">
+                            <a href="#" class="linkC">Download</a>
+                        </g:elseif>
+                            <g:link controller="readingItem" action="remove" class="linkC" params="[postId: post.id]">Mark as Read</g:link>
                         <g:link class="linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">
                             View Post </g:link>
                     </div>
@@ -302,7 +305,7 @@
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <g:select class="form-select"  id="topic" name="topic" from="${topicList}">
+                            <g:select class="form-select"  id="topic" name="topic" from="${usrSubList.topic.name}">
 %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
 %{--                                <option value="1">One</option>--}%
 %{--                                <option value="2">Two</option>--}%
@@ -327,11 +330,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <g:form controller="topic" action="sendInvite" method="post">
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -349,7 +352,7 @@
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Invite</button>
                     </div>
-                </form>
+                </g:form>
             </div>
         </div>
     </div>
@@ -378,7 +381,7 @@
                     <div class="row mb-3">
                         <label for="topic" class="col-sm-2 col-form-label">Topic</label>
                         <div class="col-sm-10">
-                            <g:select class="form-select" aria-label="Select Topic" id="topic" from="${topicList}" name="topic">
+                            <g:select class="form-select" aria-label="Select Topic" id="topic" from="${usrSubList.topic.name}" name="topic">
 %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
 %{--                                <option value="1">One</option>--}%
 %{--                                <option value="2">Two</option>--}%
@@ -430,5 +433,11 @@
 </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <asset:javascript src="app.js" />
+    <script>
+        let url = '<g:createLink controller="topic" action="edit" />'
+        let data = {}
+        var urlS = '<g:createLink controller="subscription" action="setSeriousness"/>'
+        var urlV = '<g:createLink controller="topic" action="setVisibility"/>'
+    </script>
 </body>
 </html>

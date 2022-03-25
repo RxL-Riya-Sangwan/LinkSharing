@@ -17,6 +17,18 @@ class ResourceDataController {
         Topic topic = Topic.findByName(params.topic)
         topic.addToResourcedata(newResource)
 
+        List <Subscription> subscribers = Subscription.findAllByTopic(topic)
+
+        ReadingItem newItem;
+
+        for (Subscription sub in subscribers){
+
+            newItem = new ReadingItem()
+            sub.userdata.addToReadingitem(newItem)
+            newResource.addToReadingitem(newItem)
+            newItem.isRead = false
+        }
+
         if(!newResource.validate()){
             println 'validating'
             response.status = 404
@@ -29,10 +41,13 @@ class ResourceDataController {
             redirect(action: 'show')
         }
         else{
+
             newResource.save(failOnError: true, flush: true)
             flash.message = "Link Resource Created!"
             redirect(action: 'show')
         }
+
+        newItem.save(flush: true, failOnError: true)
 
     }
 
@@ -49,6 +64,18 @@ class ResourceDataController {
         topic.addToResourcedata(newResource)
 
         newResource.filePath = "/home/rxogix/Documents/SessionII/Link_Sharing/grails-app/assets/${usr.username}${count.toString()}.pdf"
+
+        List <Subscription> subscribers = Subscription.findAllByTopic(topic)
+
+        ReadingItem newItem;
+
+        for (Subscription sub in subscribers){
+
+            newItem = new ReadingItem()
+            sub.userdata.addToReadingitem(newItem)
+            newResource.addToReadingitem(newItem)
+            newItem.isRead = false
+        }
 
         if(!newResource.validate()){
             println 'validating'
@@ -68,6 +95,9 @@ class ResourceDataController {
             count++;
             redirect(action: 'show')
         }
+
+        newItem.save(flush: true, failOnError: true)
+
     }
 
     def show(){
@@ -122,7 +152,7 @@ class ResourceDataController {
             if (!ratingList){
                 ratingList = []
             }
-            render(view: 'post', model: [post: post, ratingList: ratingList, subList: subList])
+            render(view: 'post', model: [post: post, ratingList: ratingList, subList: subList, rating: 4])
         }
     }
 }

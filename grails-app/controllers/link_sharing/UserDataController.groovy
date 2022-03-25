@@ -70,6 +70,13 @@ class UserDataController {
             usr.lastName = params.lastName
             usr.username = params.username
 
+            def f = request.getFile('file')
+
+            String filename = f.getOriginalFilename()
+
+            f.transferTo(new File("/home/rxogix/Documents/SessionII/Link_Sharing/grails-app/assets/images/${usr.username}.png"))
+            usr.photo = "${usr.username}.png"
+
             if (!usr.validate())
             {
                 usr.errors.allErrors.each {
@@ -116,19 +123,29 @@ class UserDataController {
         UserData usr = UserData.findById(params.userId);
 
         if(!usr.isAdmin){
-            if (usr.isActive){
-                usr.isActive = false
-            }
-            else{
-                usr.isActive = true
-            }
+            usr.isActive = !usr.isActive
         }
         else{
             flash.message = "You can't deactivate admin user"
             redirect(controller: 'home', action: 'index')
         }
 
-        println 'updating active status'
+        usr.save(failOnError: true, flush: true)
+
+    }
+
+
+    def adminStatus(){
+
+        UserData usr = UserData.findById(params.userId);
+        if (!usr.isActive){
+            println 'Please activate the user before making admin'
+            //
+        }
+        else{
+            usr.isAdmin = !usr.isAdmin
+        }
+        println 'changing admin status'
         usr.save(failOnError: true, flush: true)
 
     }

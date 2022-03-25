@@ -67,7 +67,7 @@
 </g:elseif>
 <div class="container mt-2">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
             <div class="shadowC border-dark card text-dark bg-light mb-3">
                 <div class="row g-0">
                     <div class="card-header">
@@ -175,51 +175,62 @@
             </div>
         </div>
         <div class="col-sm-1"></div>
-%{--        <div class="border-dark card text-dark bg-light" >--}%
-%{--            <div class="row g-0">--}%
-%{--                <div class="card-header">--}%
-%{--                    <div class="container">--}%
-%{--                        <div class="row">--}%
-%{--                            <div class="col-7">--}%
-%{--                                Posts: ${topic.name.capitalize()}--}%
-%{--                            </div>--}%
-%{--                            <div class="col-5">--}%
-%{--                                <select class="form-select-sm rightF" aria-label="Search" id="topic">--}%
-%{--                                    <option value="today" selected>Search</option>--}%
-%{--                                    <option value="week">One Week</option>--}%
-%{--                                    <option value="month">One Month</option>--}%
-%{--                                    <option value="year">One year</option>--}%
-%{--                                </select>--}%
-%{--                            </div>--}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                </div>--}%
-%{--                <g:each var="post" in="${resourceDataList.take(5)}">--}%
-%{--                    <hr>--}%
-%{--                    <div class="col-md-3">--}%
-%{--                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">--}%
-%{--                    </div>--}%
-%{--                    <div class="col-md-9">--}%
-%{--                        <div class="card-body">--}%
-%{--                            <h5 class="card-title mb-4 me-1 ">${post.getCreatedBy().firstName} ${post.getCreatedBy().lastName}--}%
-%{--                                <g:link class="linkC" controller="userData" action="profile" params="[username: post.getCreatedBy().username]"><small class="text-muted profile">@${post.getCreatedBy().username}</small></g:link>--}%
-%{--                            </h5>--}%
-%{--                            <p class="card-text">${post.description}</p>--}%
-%{--                        </div>--}%
-%{--                    </div>--}%
-%{--                    <div class="hstack card-footer d-flex justify-content-evenly">--}%
-%{--                        <a href="#" class="linkC"><i class="bi bi-google"></i></a>--}%
-%{--                        <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>--}%
-%{--                        <a href="#" class="linkC"><i class="bi bi-meta"></i></a>--}%
-%{--                        <a href="#" class="linkC">Download</a>--}%
-%{--                        <a href="#" class="linkC">View Full Site</a>--}%
-%{--                        <a href="#" class="linkC">Mark as Read</a>--}%
-%{--                        <g:link class=" linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">--}%
-%{--                            View Post </g:link>--}%
-%{--                    </div>--}%
-%{--                </g:each>--}%
-%{--            </div>--}%
-%{--        </div>--}%
+        <div class="col-sm-6">
+            <div class=" shadowC border-dark card text-dark bg-light" >
+                <div class="row g-0">
+                    <div class="card-header">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-7">
+                                    Search for "${searchTerm}"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <g:each var="post" in="${searchList.take(10)}">
+                        <hr>
+                        <div class="col-md-3">
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <h6 class="card-title">${post.createdBy.firstName} ${post.createdBy.lastName}
+                                    <g:link class="linkC small" controller="userData" action="profile" params="[username: post.createdBy.username]">
+                                        <small class="text-muted profile">@${post.createdBy.username}</small>
+                                    </g:link>
+                                    <small class="text-muted small">${(new Date() - post.lastUpdated) * 24} hrs</small>
+                                    <g:link class="m-2 linkC rightF small px-2" controller="topic" action="topicShow" params="[topicName: post.topic.name]">
+                                        ${post.topic.name}</g:link></h6>
+                                <p class="card-text small">${post.description}</p>
+                            </div>
+                        </div>
+                        <div class="hstack small card-footer d-flex justify-content-evenly">
+                            <a href="#" class="linkC"><i class="bi bi-google"></i></a>
+                            <a href="#" class="linkC"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
+                            <a href="#" class="linkC">Download</a>
+                            <a href="#" class="linkC">View Full Site</a>
+                            <a href="#" class="linkC">Mark as Read</a>
+                            <g:link class=" linkC" controller="ResourceData" action="showPost" params="[postId: post.id]">
+                                View Post </g:link>
+                        </div>
+                    </g:each>
+                </div>
+            </div>
+            <div class="p-0 m-0 card-footer bg-transparent border-dark">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </body>

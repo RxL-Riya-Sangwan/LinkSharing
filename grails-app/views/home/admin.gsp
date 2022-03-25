@@ -83,6 +83,7 @@
                     <th scope="col">Last Name</th>
                     <th scope="col">Active</th>
                     <th scope="col">Manage</th>
+                    <th scope="col">Admin?</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -95,7 +96,8 @@
                         <td>${it.firstName}</td>
                         <td>${it.lastName}</td>
                         <td class="activeStatus" data-userId="${it.id}">${it.isActive.toString().capitalize()}</td>
-                        <td class="updateStatus" style="cursor: pointer;" data-userId="${it.id}">Deactivate</td>
+                        <td class="updateStatus" style="cursor: pointer;" data-userId="${it.id}"><g:if test="${it.isActive}">Deactivate</g:if> <g:else>Activate</g:else></td>
+                        <td class="makeAdmin" style="cursor: pointer;" data-userId="${it.id}">${it.isAdmin.toString().capitalize()}</td>
                     </tr>
                     <g:set var="counter" value="${counter + 1}" />
                 </g:each>
@@ -114,7 +116,10 @@
         } );
 
         let url = '<g:createLink controller="userData" action="updateStatus" />'
+        let urlAdmin = '<g:createLink controller="userData" action="adminStatus" />'
+
         let data = {};
+
     </script>
     <asset:javascript src="app.js" />
 

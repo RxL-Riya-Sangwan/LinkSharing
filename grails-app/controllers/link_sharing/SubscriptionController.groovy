@@ -74,5 +74,27 @@ class SubscriptionController {
         List <Subscription> subList = Subscription.findAllByUserdata(usr)
         render(view: 'show', model:[subList: subList])
     }
+
+
+    def setSeriousness(){
+
+        Topic topic = Topic.findById(params.topicId)
+        UserData usr = UserData.findByUsername(session['username'])
+        Subscription sub = Subscription.findByTopic(topic)
+        if (params.seriousness == 'Serious'){
+            sub.seriousness = Seriousness.Serious;
+        }
+        else if(params.seriousness == 'Very Serious'){
+            sub.seriousness = Seriousness.VerySerious
+        }
+        else{
+            sub.seriousness = Seriousness.Casual
+        }
+
+
+        sub.save(flush: true, failOnError: true)
+
+    }
+
 }
 

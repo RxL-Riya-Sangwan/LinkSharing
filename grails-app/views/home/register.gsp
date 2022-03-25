@@ -59,7 +59,7 @@
 %{--                            </div>--}%
 %{--                            <g:submitButton class="btn btn-outline-dark" name="Login"/>--}%
 %{--                        </g:form>--}%
-                        <g:form class="m-2 p-3" url="[controller: 'home', action: 'register']" method="post">
+                        <g:form class="m-2 p-3" url="[controller: 'home', action: 'register']" method="post" enctype="multipart/form-data">
                             <div class="mb-2">
                                 <label for="firstName">First Name</label>
                                 <g:textField autocomplete="off" class="form-control" name="firstName" id="firstName" required="true"/>
@@ -82,11 +82,11 @@
                             </div>
                             <div class="mb-2">
                                 <label for="confirmPassword">Confirm Password</label>
-                                <input minlength="8" maxlength="12" type="password" class="form-control" name="confirmPassword" id="confirmPassword" required />
+                                <input minlength="8" maxlength="12" type="password" class="form-control" name="confirmPassword" id="confirmPassword" required/>
                             </div>
                             <div class="mb-2">
                                 <label for="Picture">Picture<small class="text-muted">(Size < 25MB)</small> </label><br>
-                                <input type="file" class="form-control-file" id="Picture" name="photo" accept="image/jpg, image/png, image/*">
+                                <input type="file" class="form-control-file" id="Picture" name="file" accept="image/jpg, image/png, image/*">
                             </div>
                             <div class="mb-2">
                                 <p id="msg"></p>

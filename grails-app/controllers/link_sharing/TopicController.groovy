@@ -3,8 +3,11 @@ package link_sharing
 
 import grails.transaction.Transactional
 
+
 @Transactional(readOnly = true)
 class TopicController {
+
+    def mailService
 
     static allowedMethods = ['create': ['GET', 'POST'], 'show': ['GET']]
 
@@ -42,6 +45,8 @@ class TopicController {
                     topic.addToSubscription(newSub)
                     usr.addToSubscription(newSub)
                     newSub.seriousness = Seriousness.VerySerious;
+
+                    newSub.save(flush: true, failOnError: true)
 
                     flash.message = "${topic.name} Created!"
                     redirect(action: 'show')
@@ -91,20 +96,64 @@ class TopicController {
     def delete(){
 
         UserData usr = UserData.findByUsername(session['username'])
-        Topic topic = Topic.get(params.id)
+        Topic topic = Topic.findById(params.topicId)
+
 
         if (topic.createdBy == usr || usr.isAdmin)
         {
             if(topic.createdBy == usr){
                 usr.removeFromTopics(topic)
-
             }
         }
 
         topic.delete(flush: true, failOnError: true)
+        println 'topic is deleted'
         flash.warning = "Topic is deleted"
-        redirect(controller: 'home', action: 'dashboard')
+        redirect(controller: 'home', action: 'index')
 
     }
+
+
+    def sendInvite(){
+
+        UserData usr = UserData.findByUsername(session['username'])
+
+        mailService.sendMail {
+            to params.email
+            from "riasangwan1999@gmail.com"
+//            cc "marge@gmail.com", "ed@gmail.com"
+//            bcc "joe@gmail.com"
+            subject "You're Invited!"
+            text "Subscribe to ${params.topic}"
+        }
+
+        flash.message = "Your invitation mail have been sent!"
+        redirect(controller: 'home', action: 'index')
+
+    }
+
+
+    def edit(){
+        println params
+        Topic topic = Topic.findById(params.topicId)
+        topic.name
+
+    }
+
+    def setVisibility(){
+
+        Topic topic = Topic.findById(params.topicId)
+
+        if (params.visibility == 'Private'){
+            topic.visibility = Visibility.Private
+        }
+        else{
+            topic.visibility = Visibility.Public
+        }
+
+        topic.save(flush: true, failOnError: true)
+
+    }
+
 }
 

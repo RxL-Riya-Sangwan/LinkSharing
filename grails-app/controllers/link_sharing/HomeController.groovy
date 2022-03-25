@@ -5,6 +5,8 @@ import grails.transaction.Transactional
 
 class HomeController {
 
+    def mailService
+
     static allowedMethods = ['index': 'GET', 'login': ['GET', 'POST'], 'register': ['GET','POST'], forgotPassword: ['GET', 'POST']]
     
 
@@ -31,6 +33,7 @@ class HomeController {
          {
              UserData usr = UserData.findByUsername(session['username'])
              List <Topic> alltopicList = Topic.findAll()
+             List <Subscription> usrSubList = Subscription.findAllByUserdata(usr)
              Integer countTopic = Topic.countByCreatedBy(usr)
              Integer countSub = Subscription.countByUserdata(usr)
              List <Subscription> subList = Subscription.findAllByUserdata(usr)
@@ -60,6 +63,9 @@ class HomeController {
                  }
              }
 
+             alltopicList.unique()
+             subList.unique()
+
              List <ResourceData> readingList = []
              for(Subscription sub in subList)
              {
@@ -70,7 +76,9 @@ class HomeController {
                  }
              }
 
-             render(view: 'dashboard', model: [newUser: usr, topicList: alltopicList, subList: subList,trendingList: trendingList, readingList: readingList, countTopic: countTopic, countSub: countSub])
+             readingList.unique()
+
+             render(view: 'dashboard', model: [usrSubList: usrSubList, newUser: usr, topicList: alltopicList, subList: subList,trendingList: trendingList, readingList: readingList, countTopic: countTopic, countSub: countSub])
          }
     }
 
@@ -82,7 +90,7 @@ class HomeController {
         }
         else
         {
-            Result res = homeService.getRegisterData(params, session)
+            Result res = homeService.getRegisterData(params, session, request)
             if (res.code == 1)
             {
                 flash.warning = res.value
@@ -156,6 +164,9 @@ class HomeController {
         }
         else
         {
+
+            println params
+
             if (!UserData.findByEmail(params.email))
             {
                 flash.warning = "Account with '${params.email}' is not registered"
@@ -164,8 +175,19 @@ class HomeController {
             else
             {
                 println 'Sending Mail'
-                // Do the functionality for email reset
-                render(view: 'home')
+
+                UserData adminUser = UserData.findByIsAdmin(true)
+                UserData currentUser = UserData.findByEmail(params.email)
+
+                mailService.sendMail {
+                    to 'riya.sangwan@rxlogix.com'
+                    from 'riasangwan1999@gmail.com'
+                    subject 'Password Reset'
+                    text  "Your password is ${currentUser.password}"
+                }
+
+                flash.message = "Check your registered mail for password"
+                redirect(controller: 'home', action: 'index')
             }
         }
     }
@@ -199,45 +221,67 @@ class HomeController {
     }
 
 
-    def search(){
+    def search(String search){
 
-        println 'in search'
 
-        UserData newUser = UserData.findByUsername(session['username'])
-
-        // trending topics
-        def trending = ResourceData.createCriteria().list() {
-            projections {
-                groupProperty('topic')
-                count('id', 'topicCount')
-            }
-            order('topicCount', 'desc')
-        }
-
-        List <Topic> trendingList = []
-
-        for(def li in trending)
+        if (search != '' || session['role'] == 'admin')
         {
-            String name = li.getAt(0)
-            Topic topic = Topic.findByName(name)
-            trendingList.add(topic)
-        }
+            UserData newUser = UserData.findByUsername(session['username'])
 
-
-        // top posts
-        List <ResourceData> topPosts = ResourceData.createCriteria().list (max: 5){
-            'topic'{
-                eq('visibility', Visibility.Public)
+            // trending topics
+            def trending = ResourceData.createCriteria().list() {
+                projections {
+                    groupProperty('topic')
+                    count('id', 'topicCount')
+                }
+                order('topicCount', 'desc')
             }
-            order('resourcerating', 'desc')
+
+            List <Topic> trendingList = []
+
+            for(def li in trending)
+            {
+                String name = li.getAt(0)
+                Topic topic = Topic.findByName(name)
+                trendingList.add(topic)
+            }
+
+
+            // top posts
+            List <ResourceData> topPosts = ResourceData.createCriteria().list (max: 5){
+                'topic'{
+                    eq('visibility', Visibility.Public)
+                }
+                order('resourcerating', 'desc')
+            }
+
+            // searched term related posts
+            List <ResourceData> searchList = ResourceData.findAllByDescriptionIlike("%${search}%")
+
+            List <Topic> topicList = Topic.findAllByNameIlike("%${search}%")
+
+            for (Topic topic in topicList){
+                searchList.addAll(ResourceData.findAllByTopic(topic))
+            }
+
+
+            println searchList
+
+            if(!searchList){
+                searchList = []
+            }
+
+            //pagination logic
+            Integer max = 10;
+
+
+            render(view: 'search', model: ['topPosts': topPosts, 'trendingList': trendingList, 'newUser': newUser, searchList: searchList, searchTerm: search])
+
         }
-
-        // searched term related posts
-        String name = params.search
-
-
-        render(view: 'search', model: ['topPosts': topPosts, 'trendingList': trendingList, 'newUser': newUser])
-
+        else{
+            flash.message = 'Not search term provided!'
+            redirect(controller: 'home', action: 'index')
+        }
 
     }
 

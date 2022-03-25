@@ -16,7 +16,7 @@ class Result{
 @Transactional
 class HomeService {
 
-    def getRegisterData(params, session)
+    def getRegisterData(params, session, request)
     {
             Result res = new Result()
             UserData user1 = UserData.findByEmail(params.email)
@@ -48,16 +48,20 @@ class HomeService {
                 res.code = 1
                 return res
             }
-            else if (!user1.isActive){
-                res.value = "You are deactivated by Admin"
-                res.code = 1
-                return res
-            }
             else
             {
                 UserData newUser = new UserData(params)
                 newUser.isActive = true
                 newUser.isAdmin = false
+
+                // Picture Upload
+                println request
+                def f = request.getFile('file')
+                Integer count = 1;
+
+                f.transferTo(new File("/home/rxogix/Documents/SessionII/Link_Sharing/grails-app/assets/${count.toString()}${newUser.username}"))
+                newUser.photo = "${count.toString()}${newUser.username}"
+
 
                 if (!newUser.validate())
                 {

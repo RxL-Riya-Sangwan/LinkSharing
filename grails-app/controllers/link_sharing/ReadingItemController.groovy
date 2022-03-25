@@ -21,7 +21,6 @@ class ReadingItemController {
             }
         }
 
-
         render(view: 'show', model: [readingList: readingList])
 
     }
@@ -31,15 +30,19 @@ class ReadingItemController {
         UserData usr = UserData.findByUsername(session['username'])
         ResourceData resourceData = ResourceData.findById(params.postId)
         ReadingItem item = ReadingItem.findByUserdataAndResourcedata(usr, resourceData)
+        println item
 
         item.isRead = true
         item.save(flush: true, failOnError: true)
         flash.message = "You have read a post!!"
         redirect(controller: 'home', action: 'index')
 
+
     }
 
     def add(){
+
+
 
     }
 

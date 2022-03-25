@@ -153,7 +153,7 @@
                     Profile
                 </div>
                 <div class="card-body">
-                    <g:form class="m-2 p-3" url="[controller: 'userData', action: 'updateProfile']" method="post">
+                    <g:form class="m-2 p-3" url="[controller: 'userData', action: 'updateProfile']" method="post" enctype="multipart/form-data">
                         <div class="mb-2">
                             <label for="firstName">First Name</label>
                             <g:textField autocomplete="off" class="form-control" name="firstName" id="firstName" required="true" value="${usr.firstName}"/>
@@ -168,7 +168,7 @@
                         </div>
                         <div class="mb-2">
                             <label for="Picture">Picture<small class="text-muted">(Size < 25MB)</small> </label><br>
-                            <input type="file" class="form-control-file" id="Picture" name="photo" accept="image/jpg, image/png, image/*" value="${usr.photo}">
+                            <input type="file" class="form-control-file" id="Picture" name="file" accept="image/jpg, image/png, image/*" value="${usr.photo}">
                         </div>
                         <button class="btn btn-outline-dark" type="submit" name="Update" id="submitButton">Update</button>
                     </g:form>

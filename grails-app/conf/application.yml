@@ -18,6 +18,16 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    mail:
+        host: "smtp.gmail.com"
+        port: 465
+        username: "riasangwan1999@gmail.com"
+        password: "kxrswexnalwurbjk"
+        props:
+            mail.smtp.auth: "true"
+            mail.smtp.socketFactory.port: "465"
+            mail.smtp.socketFactory.class: "javax.net.ssl.SSLSocketFactory"
+            mail.smtp.socketFactory.fallback: "false"
 info:
     app:
         name: '@info.app.name@'
@@ -111,7 +121,7 @@ dataSource:
 environments:
     development:
         dataSource:
-            dbCreate: create-drop
+            dbCreate: update
             url: jdbc:oracle:thin:@localhost:1521/orcl
     test:
         dataSource:

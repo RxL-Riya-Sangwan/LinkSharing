@@ -1,3 +1,4 @@
+<%@ page import="link_sharing.ResourceData; link_sharing.Subscription; link_sharing.Visibility; link_sharing.Seriousness; link_sharing.ResourceRating; link_sharing.DocumentResource; link_sharing.LinkResource" %>
 <!Doctype html>
 <html>
 <head>
@@ -92,8 +93,14 @@
                                 </small>
                             <h5 class="card-title mb-2 d-flex justify-content-end m-2">
                                 <g:each var="count" in="${1..5}">
-                                    <i class="bi bi-heart m-1 rating" data-count="${count}" onclick="rating(${count}, '${session["username"]}', ${post.id})"></i>
+                                    <g:if test="${ResourceRating.findByResourcedata(post) && ResourceRating.findByResourcedata(post).score < count}" >
+                                        <i class="bi bi-heart m-1 rating" data-count="${count}" onclick="rating(${count}, '${session["username"]}', ${post.id})"></i>
+                                    </g:if>
+                                    <g:else>
+                                        <i class="bi bi-heart-fill m-1 rating" data-count="${count}" onclick="rating(${count}, '${session["username"]}', ${post.id})"></i>
+                                    </g:else>
                                 </g:each>
+
                             </h5>
                             <p class="card-text pt-2">${post.description}</p>
                         </div>
@@ -104,10 +111,98 @@
                         <a href="#" class="linkC"><i class="bi bi-meta"></i></a>
                         <g:link class="linkC" controller="resourceData" action="delete" params="[postId: post.getId()]">
                         Delete</g:link>
-%{--                        <g:if test="${post.get}"--}%
-                        <a href="#" class="linkC">Edit</a>
-                        <a href="#" class="linkC">Download</a>
-                        <a href="#" class="linkC">View Post</a>
+                        <g:if test="${LinkResource.get(post.id)}">
+                            <a class="nav-link active linkC" href="#" title="Update Link Resource" data-bs-toggle="modal" data-bs-target="#updateLink">Edit</a>
+                            <div class="modal fade" id="updateLink" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Update Link</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <g:form controller="resourceData" action="createLink">
+                                                <div class="row mb-3">
+                                                    <label for="linkUrl" class="col-sm-2 col-form-label">Link</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="url" class="form-control" id="linkUrl" name="url" value="${LinkResource.findById(post.id).url}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="des" class="col-sm-2 col-form-label">Description</label>
+                                                    <div class="col-sm-10">
+                                                        <textarea class="form-control" id="des" rows="3" name="description" required>${post.description}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="topic" class="col-sm-2 col-form-label">Topic</label>
+                                                    <div class="col-sm-10">
+                                                        <g:select class="form-select" aria-label="Select Topic" id="topic" from="${subList.topic.name}" name="topic" value="${post.topic.name}">
+                                                        %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+                                                        %{--                                <option value="1">One</option>--}%
+                                                        %{--                                <option value="2">Two</option>--}%
+                                                        %{--                                <option value="3">Three</option>--}%
+                                                        </g:select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Update</button>
+                                                </div>
+                                            </g:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="${LinkResource.get(post.id).url}" target="_blank" class="linkC">View Post</a>
+
+                        </g:if>
+                        <g:elseif test="${DocumentResource.get(post.id)}">
+                            <a href="#" class="nav-link active linkC" aria-current="page" data-bs-toggle="modal" data-bs-target="#updateDocument" title="Update Document Resource">Edit</a>
+                            <div class="modal fade" id="updateDocument" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Update Document</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <g:form controller="resourceData" action="createDocument" enctype="multipart/form-data">
+                                                <div class="row mb-3">
+                                                    <label for="doc" class="col-sm-2 col-form-label">Document</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="file" class="custom-file-input form-control" id="doc" name="file" value="${DocumentResource.findById(post.id).filePath}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="des" class="col-sm-2 col-form-label">Description</label>
+                                                    <div class="col-sm-10">
+                                                        <textarea class="form-control" id="des" rows="3" required name="description">${post.description}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="topic" class="col-sm-2 col-form-label">Topic</label>
+                                                    <div class="col-sm-10">
+                                                        <g:select class="form-select"  id="topic" name="topic" from="${subList.topic.name}" value="${post.topic.name}">
+                                                        %{--                                <option selected disabled hidden>Select topic for this resource</option>--}%
+                                                        %{--                                <option value="1">One</option>--}%
+                                                        %{--                                <option value="2">Two</option>--}%
+                                                        %{--                                <option value="3">Three</option>--}%
+                                                        </g:select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Update</button>
+                                                </div>
+                                            </g:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="linkC">Download</a>
+
+                        </g:elseif>
                     </div>
                 </div>
             </div>
@@ -118,81 +213,37 @@
                     <div class="card-header">
                         Users Rated this Post
                     </div>
+                    <g:each var="rating" in="${ratingList}">
+                        <hr>
                     <div class="col-md-3">
                         <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
                     </div>
                     <div class="col-md-9">
                         <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
+                            <h5 class="card-title">${rating.userdata.firstName} ${rating.userdata.lastName}</h5>
                             <div class="container">
                                 <div class="row">
                                     <div class="col">
-                                        <small class="text-muted">@Uday</small>
+                                        <small class="text-muted">@${rating.userdata.username}</small>
                                         <p><a class="linkC" href="#">Unsubscribe</a></p>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
+                                        <small>${Subscription.countByUserdata(ratingList.userdata)}</small>
                                     </div>
                                     <div class="col">
                                         <p class="linkC">Post</p>
-                                        <small>5</small>
+                                        <small>${ResourceData.countByCreatedBy(ratingList.userdata)}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer hstack">
-                        <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                            <option selected disabled hidden>Seriousness</option>
-                            <option value="Very Serious">Very Serious</option>
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                        </select>
-                        <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                            <option selected disabled hidden>Visibility</option>
-                            <option value="Private">Private</option>
-                            <option value="Public">Public</option>
-                        </select>
+                        <g:select class="form-select m-1" aria-label="Select Seriousness" id="seriousness" from="${Seriousness}" name="seriousness"/>
+                        <g:select class="form-select m-1 visibility" aria-label="Select Topic" from="${Visibility}" name="visibility"/>
                     </div>
-                    <hr>
-                    <div class="col-md-3">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/004/154/520/small/user-account-profile-icon-man-human-person-head-sign-icon-free-free-vector.jpg" class="img-fluid rounded-start" alt="User Image">
-                    </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title">Grails</h5>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <small class="text-muted">@Uday</small>
-                                        <p><a class="linkC" href="#">Unsubscribe</a></p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Subscriptions</p>
-                                        <small>32</small>
-                                    </div>
-                                    <div class="col">
-                                        <p class="linkC">Post</p>
-                                        <small>5</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer hstack">
-                    <select class="form-select m-1" aria-label="Select Seriousness" id="seriousness">
-                        <option selected disabled hidden>Seriousness</option>
-                        <option value="Very Serious">Very Serious</option>
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                    </select>
-                    <select class="form-select m-1" aria-label="Select Topic" id="visiblity">
-                        <option selected disabled hidden>Visibility</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
-                    </select>
+                    </g:each>
                 </div>
             </div>
         </div>
@@ -360,3 +411,6 @@
 <asset:javascript src="app.js" />
 </body>
 </html>
+
+%{--<a href="#" class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#shareDocument"><i class="bi bi-file-earmark-plus-fill" title="Share Document"></i></a>--}%
+%{--<a class="nav-link active" href="#"><i class="bi bi-link-45deg" title="Share Link" data-bs-toggle="modal" data-bs-target="#shareLink"></i></a>--}%
